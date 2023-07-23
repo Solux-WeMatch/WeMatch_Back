@@ -20,5 +20,4 @@ public interface TodoMapper {
 
     Todo findTodoByIdDate(Long memberId, Date todo_schedule);
 
-
 }

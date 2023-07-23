@@ -7,7 +7,6 @@ import WeMatch.wematch.domain.todo.entity.Todo;
 import WeMatch.wematch.domain.todo.repository.TodoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.sql.Date;
 import java.util.List;

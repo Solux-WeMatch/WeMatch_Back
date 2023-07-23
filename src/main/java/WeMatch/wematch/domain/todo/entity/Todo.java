@@ -2,7 +2,6 @@ package WeMatch.wematch.domain.todo.entity;
 
 import lombok.Builder;
 import lombok.Data;
-
 import java.sql.Date;
 
 @Data

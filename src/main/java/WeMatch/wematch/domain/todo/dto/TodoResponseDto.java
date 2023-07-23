@@ -12,7 +12,6 @@ public class TodoResponseDto {
     private Date todo_schedule;
     private boolean completed;
 
-
     public TodoResponseDto(Todo entity) {
         this.memberId = entity.getMemberId();
         this.todoName = entity.getTodoName();
