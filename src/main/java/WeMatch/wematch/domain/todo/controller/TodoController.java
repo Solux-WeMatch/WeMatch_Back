@@ -1,45 +1,41 @@
 package WeMatch.wematch.domain.todo.controller;
 
-import WeMatch.wematch.domain.todo.entity.Todo;
+import WeMatch.wematch.domain.todo.dto.TodoRequestDto;
+import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
+import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
 import WeMatch.wematch.domain.todo.repository.TodoRepository;
-import org.springframework.http.ResponseEntity;
+import WeMatch.wematch.domain.todo.service.TodoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+
+import java.sql.Date;
+import java.util.List;
 
 @RequestMapping("/todo")
+@RequiredArgsConstructor
+@RestController
 public class TodoController {
-    private TodoRepository todoRepository = TodoRepository.getInstance();
+    private final TodoService todoService;
 
-    @PostMapping
-    public Todo createTodo(@RequestBody Todo todo) {
-        return todoRepository.save(todo);
+    @PostMapping("/save_todo")
+    public void saveTodo(@RequestBody TodoSaveRequestDto todoSaveRequestDto){
+        todoService.saveTodo(todoSaveRequestDto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable Long TodoId, @RequestBody Todo updatedTodo) {
-        Optional<Todo> todo = todoRepository.findById(TodoId);
-        if (todo.isPresent()) {
-            Todo existingTodo = todo.get();
-            existingTodo.setTodoName(updatedTodo.getTodoName());
-            existingTodo.setCompleted(updatedTodo.isCompleted());
-            todoRepository.save(existingTodo);
-            return ResponseEntity.ok(existingTodo);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/update_todo/{todoId}")
+    public void updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto todoRequestDto){
+        todoService.updateTodo(todoId, todoRequestDto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable Long TodoId) {
-        Optional<Todo> todo = todoRepository.findById(TodoId);
-        if (todo.isPresent()) {
-            todoRepository.deleteById(TodoId);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/delete_todo/{todoId}")
+    public void deleteTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto todoRequestDto){
+        todoService.deleteTodo(todoId, todoRequestDto);
     }
 
-
+    // memberId가 id인 사용자의 date 날짜의 todo 조회
+    @GetMapping("/{id}/{date}")
+    public List<TodoResponseDto> findByIdDate(@PathVariable Long memberId, @PathVariable Date todo_schedule){
+        return todoService.findTodoByIdDate(memberId, todo_schedule);
+    }
 }
