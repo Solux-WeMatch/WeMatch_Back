@@ -2,7 +2,6 @@ package WeMatch.wematch.domain.todo.dto;
 
 import WeMatch.wematch.domain.todo.entity.Todo;
 import lombok.Getter;
-
 import java.sql.Date;
 
 @Getter
