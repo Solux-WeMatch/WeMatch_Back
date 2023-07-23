@@ -35,6 +35,6 @@ public class TodoController {
     // memberId가 id인 사용자의 date 날짜의 todo 조회
     @GetMapping("/{id}/{date}")
     public List<TodoResponseDto> findByIdDate(@PathVariable Long memberId, @PathVariable Date todo_schedule){
-        return todoService.findTodoByIdDate(memberId, todo_schedule);
+        return todoService.findTodoByIdDate(memberId, todo_schedule); // 코드 수정 필요
     }
 }
