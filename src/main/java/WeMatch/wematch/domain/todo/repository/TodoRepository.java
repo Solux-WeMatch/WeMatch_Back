@@ -1,47 +1,38 @@
 package WeMatch.wematch.domain.todo.repository;
 
 import WeMatch.wematch.domain.todo.entity.Todo;
+import WeMatch.wematch.mapper.TodoMapper;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.*;
 
+@Repository
+@AllArgsConstructor
 public class TodoRepository {
-    private static Map<Long, Todo> todolist = new HashMap<>();
-    private static long sequence = 0L;
 
-    private static final TodoRepository instance = new TodoRepository();
+    public TodoMapper todoDAO;
 
-    public static TodoRepository getInstance() {
-        return instance;
+    public void saveTodo(Todo todo){
+        todoDAO.saveTodo(todo);
     }
 
-    private TodoRepository(){
-
+    public void updateTodo(Todo todo){
+        todoDAO.updateTodo(todo);
     }
 
-    public Todo save(Todo todo){
-        todo.setTodoId(++sequence);
-        todolist.put(todo.getTodoId(), todo);
+    public void deleteTodo(Todo todo){
+        todoDAO.deleteTodo(todo);
+    }
+
+    public Todo findTodoByIdDate(Long memberId, Date todo_schedule){
+        Todo todo = todoDAO.findTodoByIdDate(memberId, todo_schedule);
+        return todo; // todo가 여려개일 경우 대비 코드 수정
+    }
+
+    public Todo findTodoById(Long memberId, Long todoId){
+        Todo todo = todoDAO.findTodoById(memberId, todoId);
         return todo;
-    }
-
-    public Todo delete(Todo todo){
-        todolist.remove(todo.getTodoId());
-        return todo;
-    }
-
-//    public Todo findById(Long id){
-//        return todolist.get(id);
-//    }
-
-    public Todo findById(Long TodoId){
-        return todolist.get(TodoId);
-    }
-
-    public List<Todo> findAll() {
-        return new ArrayList<>(todolist.values());
-    }
-
-    public void clearTodolist(){
-        todolist.clear();
     }
 }
