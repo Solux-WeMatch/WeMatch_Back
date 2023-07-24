@@ -27,29 +27,29 @@ public class EventController {
         eventService.saveEvent(eventSaveRequestDto);
     }
 
-    @PutMapping("/update/{eventId}")
-    public void updateEvent(@PathVariable Long eventId, @RequestBody EventRequestDto eventRequestDto){
+    @PutMapping("/update")
+    public void updateEvent(@RequestParam Long eventId, @RequestBody EventRequestDto eventRequestDto){
         eventService.updateEvent(eventId, eventRequestDto);
     }
 
-    @DeleteMapping("/delete/{eventId}")
-    public void deleteEvent(@PathVariable Long eventId, @RequestBody EventRequestDto eventRequestDto){
+    @DeleteMapping("/delete")
+    public void deleteEvent(@RequestParam Long eventId, @RequestBody EventRequestDto eventRequestDto){
         eventService.deleteEvent(eventId, eventRequestDto);
     }
 
     // memberId가 id인 사용자의 date 날짜의 event 조회
-    @GetMapping("/day/{id}/{date}")
-    public List<Event> findEventByDay(@PathVariable Long memberId, @PathVariable LocalDateTime date){
+    @GetMapping("/day")
+    public List<Event> findEventByDay(@RequestParam Long memberId, @RequestParam LocalDateTime date){
         return eventService.findEventByDay(memberId, date);
     }
 
-    @GetMapping("/week/{id}/{date}")
-    public List<Event> findEventByWeek(@PathVariable Long memberId, @PathVariable LocalDateTime date){
+    @GetMapping("/week")
+    public List<Event> findEventByWeek(@RequestParam Long memberId, @RequestParam LocalDateTime date){
         return eventService.findEventByWeek(memberId, date);
     }
 
-    @GetMapping("/month/{id}/{date}")
-    public List<Event> findEventByMonth(@PathVariable Long memberId, @PathVariable LocalDateTime date){
+    @GetMapping("/month")
+    public List<Event> findEventByMonth(@RequestParam Long memberId, @RequestParam LocalDateTime date){
         return eventService.findEventByMonth(memberId, date);
     }
 }

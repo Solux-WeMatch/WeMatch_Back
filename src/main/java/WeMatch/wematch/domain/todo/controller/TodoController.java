@@ -21,24 +21,24 @@ public class TodoController {
         todoService.saveTodo(todoSaveRequestDto);
     }
 
-    @PutMapping("/update/{todoId}")
-    public void updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto todoRequestDto){
+    @PutMapping("/update")
+    public void updateTodo(@RequestParam Long todoId, @RequestBody TodoRequestDto todoRequestDto){
         todoService.updateTodo(todoId, todoRequestDto);
     }
 
-    @PutMapping("/check/{todoId}")
-    public void checkTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto todoRequestDto){
+    @PutMapping("/check")
+    public void checkTodo(@RequestParam Long todoId, @RequestBody TodoRequestDto todoRequestDto){
         todoService.checkTodo(todoRequestDto.getMemberId(), todoId);
     }
 
-    @DeleteMapping("/delete/{todoId}")
-    public void deleteTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto todoRequestDto){
+    @DeleteMapping("/delete}")
+    public void deleteTodo(@RequestParam Long todoId, @RequestBody TodoRequestDto todoRequestDto){
         todoService.deleteTodo(todoId, todoRequestDto);
     }
 
     // memberId가 id인 사용자의 date 날짜의 todo 조회
-    @GetMapping("/{id}/{date}")
-    public List<TodoResponseDto> findByIdDate(@PathVariable Long memberId, @PathVariable Date todo_schedule){
+    @GetMapping
+    public List<TodoResponseDto> findByIdDate(@RequestParam Long memberId, @RequestParam Date todo_schedule){
         return todoService.findTodoByIdDate(memberId, todo_schedule); // 코드 수정 필요
     }
 }
