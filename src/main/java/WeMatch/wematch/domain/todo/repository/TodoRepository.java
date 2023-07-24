@@ -4,7 +4,9 @@ import WeMatch.wematch.domain.todo.entity.Todo;
 import WeMatch.wematch.mapper.TodoMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
+
 import java.sql.Date;
+import java.util.*;
 
 @Repository
 @AllArgsConstructor
@@ -18,6 +20,10 @@ public class TodoRepository {
 
     public void updateTodo(Todo todo){
         todoDAO.updateTodo(todo);
+    }
+
+    public void checkTodo(Todo todo){
+        todoDAO.checkTodo(todo);
     }
 
     public void deleteTodo(Todo todo){

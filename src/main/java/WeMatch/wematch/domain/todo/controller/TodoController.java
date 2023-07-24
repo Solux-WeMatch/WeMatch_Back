@@ -3,7 +3,6 @@ package WeMatch.wematch.domain.todo.controller;
 import WeMatch.wematch.domain.todo.dto.TodoRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
 import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
-import WeMatch.wematch.domain.todo.repository.TodoRepository;
 import WeMatch.wematch.domain.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +16,22 @@ import java.util.List;
 public class TodoController {
     private final TodoService todoService;
 
-    @PostMapping("/save_todo")
+    @PostMapping("/save")
     public void saveTodo(@RequestBody TodoSaveRequestDto todoSaveRequestDto){
         todoService.saveTodo(todoSaveRequestDto);
     }
 
-    @PutMapping("/update_todo/{todoId}")
+    @PutMapping("/update/{todoId}")
     public void updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto todoRequestDto){
         todoService.updateTodo(todoId, todoRequestDto);
     }
 
-    @DeleteMapping("/delete_todo/{todoId}")
+    @PutMapping("/check/{todoId}")
+    public void checkTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto todoRequestDto){
+        todoService.checkTodo(todoRequestDto.getMemberId(), todoId);
+    }
+
+    @DeleteMapping("/delete/{todoId}")
     public void deleteTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto todoRequestDto){
         todoService.deleteTodo(todoId, todoRequestDto);
     }

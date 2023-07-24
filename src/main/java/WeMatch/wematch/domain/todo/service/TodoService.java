@@ -26,6 +26,11 @@ public class TodoService {
         todoRepository.updateTodo(todo);
     }
 
+    public void checkTodo(Long memberId, Long todoId){
+        Todo todo = todoRepository.findTodoById(memberId, todoId);
+        todoRepository.checkTodo(todo);
+    }
+
     public void deleteTodo(Long todoId, TodoRequestDto todoRequestDto){
         Todo todo = todoRepository.findTodoById(todoRequestDto.getMemberId(), todoId);
         todoRepository.deleteTodo(todo);
@@ -36,7 +41,7 @@ public class TodoService {
         return new TodoResponseDto(entity);
     }
 
-//    public List<TodoResponseDto> findTodoByIdDate(Long memberId, Date todoSchedule) {
-//        return todoRepository.findTodoByIdDate(memberId, todoSchedule);
-//    }
+    public List<TodoResponseDto> findTodoByIdDate(Long memberId, Date todoSchedule) {
+        return (List<TodoResponseDto>) todoRepository.findTodoByIdDate(memberId, todoSchedule);
+    }
 }

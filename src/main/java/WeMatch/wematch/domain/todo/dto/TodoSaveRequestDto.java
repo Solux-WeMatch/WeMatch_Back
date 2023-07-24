@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -13,11 +14,11 @@ public class TodoSaveRequestDto {
     private Long todoId;
     private Long memberId;
     private String todoName;
-    private Date todo_schedule;
+    private LocalDateTime todo_schedule;
     private boolean completed;
 
     @Builder
-    public TodoSaveRequestDto(Long memberId, String todoName, Date todo_schedule) {
+    public TodoSaveRequestDto(Long memberId, String todoName, LocalDateTime todo_schedule) {
         // this.todoId = todoId;
         this.memberId = memberId;
         this.todoName = todoName;

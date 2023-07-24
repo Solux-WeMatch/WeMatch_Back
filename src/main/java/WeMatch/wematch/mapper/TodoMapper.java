@@ -12,6 +12,9 @@ public interface TodoMapper {
     // Todo 삭제
     void deleteTodo(Todo todo);
 
+    // Todo 완료 체크
+    void checkTodo(Todo todo);
+
     // Todo 수정
     void updateTodo(Todo todo);
 
