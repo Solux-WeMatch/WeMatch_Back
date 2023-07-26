@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,30 +16,33 @@ import java.util.List;
 public class EventService {
     private final EventRepository eventRepository;
 
-    public void saveEvent(EventSaveRequestDto eventSaveRequestDto){
-        eventRepository.saveEvent(eventSaveRequestDto.toEntity());
+    public EventResponseDto saveEvent(EventSaveRequestDto eventSaveRequestDto){
+        EventResponseDto result = eventRepository.saveEvent(eventSaveRequestDto.toEntity());
+        return result;
     }
 
-    public void updateEvent(Long eventId, EventRequestDto eventRequestDto){
-        Event event = eventRepository.findEventById(eventRequestDto.getMemberId(), eventId);
+    public EventResponseDto updateEvent(EventRequestDto eventRequestDto){
+        Event event = eventRepository.findEventById(eventRequestDto.getEventId());
         event.updateEvent(eventRequestDto.getEventName());
-        eventRepository.updateTodo(event);
+        EventResponseDto result = eventRepository.updateTodo(event);
+        return result;
     }
 
-    public void deleteEvent(Long eventId, EventRequestDto eventRequestDto){
-        Event event = eventRepository.findEventById(eventRequestDto.getMemberId(), eventId);
-        eventRepository.deleteTodo(event);
+    public EventResponseDto deleteEvent(EventRequestDto eventRequestDto){
+        Event event = eventRepository.findEventById(eventRequestDto.getEventId());
+        EventResponseDto result = eventRepository.deleteTodo(event);
+        return result;
     }
 
-    public List<Event> findEventByDay(Long memberId, LocalDateTime date) {
-        return (List<Event>) eventRepository.findEventByDay(memberId, date);
+    public List<EventResponseDto> findEventByDay(Long memberId, LocalDateTime date) {
+        return eventRepository.findEventByDay(memberId, date);
     }
 
-    public List<Event> findEventByWeek(Long memberId, LocalDateTime date) {
-        return (List<Event>) eventRepository.findEventByWeek(memberId, date);
+    public List<EventResponseDto> findEventByWeek(Long memberId, LocalDateTime date) {
+        return eventRepository.findEventByWeek(memberId, date);
     }
 
-    public List<Event> findEventByMonth(Long memberId, LocalDateTime date) {
-        return (List<Event>) eventRepository.findEventByMonth(memberId, date);
+    public List<EventResponseDto> findEventByMonth(Long memberId, LocalDateTime date) {
+        return eventRepository.findEventByMonth(memberId, date);
     }
 }

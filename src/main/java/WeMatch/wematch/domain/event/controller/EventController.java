@@ -9,6 +9,8 @@ import WeMatch.wematch.domain.todo.dto.TodoRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
 import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
 import WeMatch.wematch.domain.todo.service.TodoService;
+import WeMatch.wematch.response.Response;
+import static WeMatch.wematch.response.ResponseMessage.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,33 +25,39 @@ public class EventController {
     private final EventService eventService;
 
     @PostMapping("/save")
-    public void saveEvent(@RequestBody EventSaveRequestDto eventSaveRequestDto){
-        eventService.saveEvent(eventSaveRequestDto);
+    public Response saveEvent(@RequestBody EventSaveRequestDto eventSaveRequestDto){
+        EventResponseDto result = eventService.saveEvent(eventSaveRequestDto);
+        return Response.success(SUCCESS, result);
     }
 
     @PutMapping("/update")
-    public void updateEvent(@RequestParam Long eventId, @RequestBody EventRequestDto eventRequestDto){
-        eventService.updateEvent(eventId, eventRequestDto);
+    public Response updateEvent(@RequestBody EventRequestDto eventRequestDto){
+        EventResponseDto result = eventService.updateEvent(eventRequestDto);
+        return Response.success(SUCCESS, result);
     }
 
     @DeleteMapping("/delete")
-    public void deleteEvent(@RequestParam Long eventId, @RequestBody EventRequestDto eventRequestDto){
-        eventService.deleteEvent(eventId, eventRequestDto);
+    public Response deleteEvent(@RequestBody EventRequestDto eventRequestDto){
+        EventResponseDto result = eventService.deleteEvent(eventRequestDto);
+        return Response.success(SUCCESS, result);
     }
 
     // memberId가 id인 사용자의 date 날짜의 event 조회
     @GetMapping("/day")
-    public List<Event> findEventByDay(@RequestParam Long memberId, @RequestParam LocalDateTime date){
-        return eventService.findEventByDay(memberId, date);
+    public Response findEventByDay(@RequestParam Long memberId, @RequestParam LocalDateTime date){
+        List<EventResponseDto> result = eventService.findEventByDay(memberId, date); // memberService 이용 코드 수정
+        return Response.success(SUCCESS, result);
     }
 
     @GetMapping("/week")
-    public List<Event> findEventByWeek(@RequestParam Long memberId, @RequestParam LocalDateTime date){
-        return eventService.findEventByWeek(memberId, date);
+    public Response findEventByWeek(@RequestParam Long memberId, @RequestParam LocalDateTime date){
+        List<EventResponseDto> result = eventService.findEventByWeek(memberId, date); // memberService 이용 코드 수정
+        return Response.success(SUCCESS, result);
     }
 
     @GetMapping("/month")
-    public List<Event> findEventByMonth(@RequestParam Long memberId, @RequestParam LocalDateTime date){
-        return eventService.findEventByMonth(memberId, date);
+    public Response findEventByMonth(@RequestParam Long memberId, @RequestParam LocalDateTime date){
+        List<EventResponseDto> result = eventService.findEventByMonth(memberId, date); // memberService 이용 코드 수정
+        return Response.success(SUCCESS, result);
     }
 }

@@ -1,50 +1,55 @@
 package WeMatch.wematch.domain.event.repository;
 
+import WeMatch.wematch.domain.event.dto.EventResponseDto;
 import WeMatch.wematch.domain.event.entity.Event;
 import WeMatch.wematch.mapper.EventMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 @AllArgsConstructor
 public class EventRepository {
     public EventMapper eventDAO;
 
-    public void saveEvent(Event event){
-        eventDAO.saveEvent(event);
+    public EventResponseDto saveEvent(Event event){
+        EventResponseDto result = eventDAO.saveEvent(event);
+        return result;
     }
 
-    public void updateTodo(Event todo){
-        eventDAO.updateEvent(todo);
+    public EventResponseDto updateTodo(Event todo){
+        EventResponseDto result = eventDAO.updateEvent(todo);
+        return result;
     }
 
-    public void deleteTodo(Event todo){
-        eventDAO.deleteEvent(todo);
+    public EventResponseDto deleteTodo(Event todo){
+        EventResponseDto result = eventDAO.deleteEvent(todo);
+        return result;
     }
 
     // eventId로 event 조회
-    public Event findEventById(Long memberId, Long eventId){
-        Event event = eventDAO.findEventById(memberId, eventId);
+    public Event findEventById(Long eventId){
+        Event event = eventDAO.findEventById(eventId);
         return event;
     }
 
     // 날짜별 event 조회
-    public Event findEventByDay(Long memberId, LocalDateTime date){
-        Event event = eventDAO.findEventByDay(memberId, date);
-        return event; // List?
+    public List<EventResponseDto> findEventByDay(Long memberId, LocalDateTime date){
+        List<EventResponseDto> event = eventDAO.findEventByDay(memberId, date);
+        return event;
     }
 
     // 날짜 기준 주별 event 조회
-    public Event findEventByWeek(Long memberId, LocalDateTime date){
-        Event event = eventDAO.findEventByWeek(memberId, date);
+    public List<EventResponseDto> findEventByWeek(Long memberId, LocalDateTime date){
+        List<EventResponseDto> event = eventDAO.findEventByWeek(memberId, date);
         return event;
     }
 
     // 날짜 기준 월별 event 조회
-    public Event findEventByMonth(Long memberId, LocalDateTime date){
-        Event event = eventDAO.findEventByMonth(memberId, date);
+    public List<EventResponseDto> findEventByMonth(Long memberId, LocalDateTime date){
+        List<EventResponseDto> event = eventDAO.findEventByMonth(memberId, date);
         return event;
     }
 }
