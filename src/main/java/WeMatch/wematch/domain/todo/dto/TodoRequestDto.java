@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -12,11 +14,13 @@ public class TodoRequestDto {
     private Long todoId;
     private Long memberId;
     private String todoName;
+    private LocalDate todo_schedule;
 
     @Builder
-    public TodoRequestDto(Long todoId, Long memberId, String todoName) {
+    public TodoRequestDto(Long todoId, Long memberId, String todoName, LocalDate todo_schedule) {
         this.todoId = todoId;
         this.memberId = memberId;
         this.todoName = todoName;
+        this.todo_schedule = todo_schedule;
     }
 }

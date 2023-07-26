@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -16,32 +17,36 @@ import java.util.List;
 public class TodoService {
     private final TodoRepository todoRepository;
 
-    public void saveTodo(TodoSaveRequestDto todoSaveRequestDto){
-        todoRepository.saveTodo(todoSaveRequestDto.toEntity());
+    public TodoResponseDto saveTodo(TodoSaveRequestDto todoSaveRequestDto){
+        TodoResponseDto result = todoRepository.saveTodo(todoSaveRequestDto);
+        return result;
     }
 
-    public void updateTodo(Long todoId, TodoRequestDto todoRequestDto){
-        Todo todo = todoRepository.findTodoById(todoRequestDto.getMemberId(), todoId);
+    public TodoResponseDto updateTodo(TodoRequestDto todoRequestDto){
+        Todo todo = todoRepository.findTodoById(todoRequestDto.getTodoId());
         todo.updateTodo(todoRequestDto.getTodoName());
-        todoRepository.updateTodo(todo);
+        TodoResponseDto result = todoRepository.updateTodo(todo);
+        return result;
     }
 
-    public void checkTodo(Long memberId, Long todoId){
-        Todo todo = todoRepository.findTodoById(memberId, todoId);
-        todoRepository.checkTodo(todo);
+    public TodoResponseDto checkTodo(TodoRequestDto todoRequestDto){
+        Todo todo = todoRepository.findTodoById(todoRequestDto.getTodoId());
+        TodoResponseDto result = todoRepository.checkTodo(todo);
+        return result;
     }
 
-    public void deleteTodo(Long todoId, TodoRequestDto todoRequestDto){
-        Todo todo = todoRepository.findTodoById(todoRequestDto.getMemberId(), todoId);
-        todoRepository.deleteTodo(todo);
+    public TodoResponseDto deleteTodo(TodoRequestDto todoRequestDto){
+        Todo todo = todoRepository.findTodoById(todoRequestDto.getTodoId());
+        TodoResponseDto result = todoRepository.deleteTodo(todo);
+        return result;
     }
 
     public TodoResponseDto findById(TodoRequestDto todoRequestDto) {
-        Todo entity = todoRepository.findTodoById(todoRequestDto.getMemberId(), todoRequestDto.getTodoId());
+        Todo entity = todoRepository.findTodoById(todoRequestDto.getTodoId());
         return new TodoResponseDto(entity);
     }
 
-    public List<TodoResponseDto> findTodoByIdDate(Long memberId, Date todoSchedule) {
+    public List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate todoSchedule) {
         return (List<TodoResponseDto>) todoRepository.findTodoByIdDate(memberId, todoSchedule);
     }
 }

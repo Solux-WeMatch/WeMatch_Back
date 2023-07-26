@@ -1,12 +1,16 @@
 package WeMatch.wematch.domain.todo.repository;
 
+import WeMatch.wematch.domain.event.dto.EventResponseDto;
+import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
+import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
 import WeMatch.wematch.domain.todo.entity.Todo;
 import WeMatch.wematch.mapper.TodoMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 @AllArgsConstructor
@@ -14,29 +18,37 @@ public class TodoRepository {
 
     public TodoMapper todoDAO;
 
-    public void saveTodo(Todo todo){
-        todoDAO.saveTodo(todo);
+    public TodoResponseDto saveTodo(TodoSaveRequestDto todoSaveRequestDto){
+        TodoResponseDto result = todoDAO.saveTodo(todoSaveRequestDto);
+        return result;
     }
 
-    public void updateTodo(Todo todo){
-        todoDAO.updateTodo(todo);
+    public TodoResponseDto updateTodo(Todo todo){
+        TodoResponseDto result = todoDAO.updateTodo(todo);
+        return result;
     }
 
-    public void checkTodo(Todo todo){
-        todoDAO.checkTodo(todo);
+    public TodoResponseDto checkTodo(Todo todo){
+        TodoResponseDto result = todoDAO.checkTodo(todo);
+        return result;
     }
 
-    public void deleteTodo(Todo todo){
-        todoDAO.deleteTodo(todo);
+    public TodoResponseDto deleteTodo(Todo todo){
+        TodoResponseDto result = todoDAO.deleteTodo(todo);
+        return result;
     }
 
-    public Todo findTodoByIdDate(Long memberId, Date todo_schedule){
-        Todo todo = todoDAO.findTodoByIdDate(memberId, todo_schedule);
-        return todo; // todo가 여려개일 경우 대비 코드 수정
-    }
-
-    public Todo findTodoById(Long memberId, Long todoId){
-        Todo todo = todoDAO.findTodoById(memberId, todoId);
+    public List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate todo_schedule){
+        List<TodoResponseDto> todo = todoDAO.findTodoByIdDate(memberId, todo_schedule);
         return todo;
+    }
+
+    public Todo findTodoById(Long todoId){
+        Todo todo = todoDAO.findTodoById(todoId);
+        return todo;
+    }
+
+    public void deleteAll(){
+
     }
 }

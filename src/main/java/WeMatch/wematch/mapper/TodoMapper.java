@@ -1,26 +1,32 @@
 package WeMatch.wematch.mapper;
 
+import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
+import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
 import WeMatch.wematch.domain.todo.entity.Todo;
+import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
 
+@org.apache.ibatis.annotations.Mapper
 public interface TodoMapper {
 
     // Todo 생성
-    void saveTodo(Todo todo);
+    TodoResponseDto saveTodo(TodoSaveRequestDto todoSaveRequestDto);
 
     // Todo 삭제
-    void deleteTodo(Todo todo);
+    TodoResponseDto deleteTodo(Todo todo);
 
     // Todo 완료 체크
-    void checkTodo(Todo todo);
+    TodoResponseDto checkTodo(Todo todo);
 
     // Todo 수정
-    void updateTodo(Todo todo);
+    TodoResponseDto updateTodo(Todo todo);
 
     // Todo (memberId, TodoId)로 조회
-    Todo findTodoById(Long memberId, Long todoId);
+    Todo findTodoById(Long todoId);
 
-    Todo findTodoByIdDate(Long memberId, Date todo_schedule);
+    List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate todo_schedule);
 
 }
