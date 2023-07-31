@@ -1,25 +1,29 @@
 package WeMatch.wematch.mapper;
 
+import WeMatch.wematch.domain.event.dto.EventRequestDto;
 import WeMatch.wematch.domain.event.dto.EventResponseDto;
+import WeMatch.wematch.domain.event.dto.EventSaveRequestDto;
 import WeMatch.wematch.domain.event.entity.Event;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @org.apache.ibatis.annotations.Mapper
 public interface EventMapper {
-    EventResponseDto saveEvent(Event event);
+    void saveEvent(EventSaveRequestDto eventSaveRequestDto);
 
-    EventResponseDto deleteEvent(Event event);
+    void deleteEvent(Long eventId);
 
-    EventResponseDto updateEvent(Event event);
+    void updateEvent(EventRequestDto eventRequestDto);
 
     // eventId로 event 조회
     Event findEventById(Long eventId);
 
     // date 날짜의 event 조회
-    List<EventResponseDto> findEventByDay(Long memberId, LocalDateTime date);
+    List<EventResponseDto> findEventByDay(@Param("memberId") Long memberId, @Param("date") LocalDate date);
 
     // date 날짜가 속한 week의 event 조회
     List<EventResponseDto> findEventByWeek(Long memberId, LocalDateTime date);

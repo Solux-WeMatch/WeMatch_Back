@@ -1,11 +1,15 @@
 package WeMatch.wematch.domain.event.repository;
 
+import WeMatch.wematch.domain.event.dto.EventRequestDto;
 import WeMatch.wematch.domain.event.dto.EventResponseDto;
+import WeMatch.wematch.domain.event.dto.EventSaveRequestDto;
 import WeMatch.wematch.domain.event.entity.Event;
 import WeMatch.wematch.mapper.EventMapper;
 import lombok.AllArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,19 +18,16 @@ import java.util.List;
 public class EventRepository {
     public EventMapper eventDAO;
 
-    public EventResponseDto saveEvent(Event event){
-        EventResponseDto result = eventDAO.saveEvent(event);
-        return result;
+    public void saveEvent(EventSaveRequestDto eventSaveRequestDto){
+        eventDAO.saveEvent(eventSaveRequestDto);
     }
 
-    public EventResponseDto updateTodo(Event todo){
-        EventResponseDto result = eventDAO.updateEvent(todo);
-        return result;
+    public void updateEvent(EventRequestDto eventRequestDto){
+        eventDAO.updateEvent(eventRequestDto);
     }
 
-    public EventResponseDto deleteTodo(Event todo){
-        EventResponseDto result = eventDAO.deleteEvent(todo);
-        return result;
+    public void deleteEvent(Long eventId){
+        eventDAO.deleteEvent(eventId);
     }
 
     // eventId로 event 조회
@@ -36,7 +37,7 @@ public class EventRepository {
     }
 
     // 날짜별 event 조회
-    public List<EventResponseDto> findEventByDay(Long memberId, LocalDateTime date){
+    public List<EventResponseDto> findEventByDay(@Param("memberId") Long memberId, @Param("date") LocalDate date){
         List<EventResponseDto> event = eventDAO.findEventByDay(memberId, date);
         return event;
     }

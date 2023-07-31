@@ -1,5 +1,6 @@
 package WeMatch.wematch.domain.event.controller;
 
+import WeMatch.wematch.domain.event.dto.EventListRequestDto;
 import WeMatch.wematch.domain.event.dto.EventRequestDto;
 import WeMatch.wematch.domain.event.dto.EventResponseDto;
 import WeMatch.wematch.domain.event.dto.EventSaveRequestDto;
@@ -12,6 +13,8 @@ import WeMatch.wematch.domain.todo.service.TodoService;
 import WeMatch.wematch.response.Response;
 import static WeMatch.wematch.response.ResponseMessage.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -26,27 +29,34 @@ public class EventController {
 
     @PostMapping("/save")
     public Response saveEvent(@RequestBody EventSaveRequestDto eventSaveRequestDto){
-        EventResponseDto result = eventService.saveEvent(eventSaveRequestDto);
-        return Response.success(SUCCESS, result);
+        eventService.saveEvent(eventSaveRequestDto);
+        EventSaveRequestDto result = eventSaveRequestDto;
+        return Response.success(SUCCESS_EVENT_SAVE, result);
     }
 
     @PutMapping("/update")
     public Response updateEvent(@RequestBody EventRequestDto eventRequestDto){
-        EventResponseDto result = eventService.updateEvent(eventRequestDto);
-        return Response.success(SUCCESS, result);
+        eventService.updateEvent(eventRequestDto);
+        EventRequestDto result = eventRequestDto;
+        return Response.success(SUCCESS_EVENT_UPDATE, result);
     }
 
     @DeleteMapping("/delete")
-    public Response deleteEvent(@RequestBody EventRequestDto eventRequestDto){
-        EventResponseDto result = eventService.deleteEvent(eventRequestDto);
-        return Response.success(SUCCESS, result);
+    public Response deleteEvent(@RequestParam Long eventId){
+        eventService.deleteEvent(eventId);
+        // EventRequestDto result = eventRequestDto;
+        return Response.success(SUCCESS_EVENT_DELETE);
     }
 
     // memberId가 id인 사용자의 date 날짜의 event 조회
     @GetMapping("/day")
-    public Response findEventByDay(@RequestParam Long memberId, @RequestParam LocalDateTime date){
-        List<EventResponseDto> result = eventService.findEventByDay(memberId, date); // memberService 이용 코드 수정
-        return Response.success(SUCCESS, result);
+    public ResponseEntity<List<EventResponseDto>> findEventByDay(@RequestBody EventListRequestDto eventListRequestDto){
+        List<EventResponseDto> result = eventService.findEventByDay(eventListRequestDto.getMemberId(), eventListRequestDto.getDate()); // memberService 이용 코드 수정
+        if (!result.isEmpty()) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/week")

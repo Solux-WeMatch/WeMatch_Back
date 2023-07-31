@@ -6,8 +6,10 @@ import WeMatch.wematch.domain.event.dto.EventSaveRequestDto;
 import WeMatch.wematch.domain.event.entity.Event;
 import WeMatch.wematch.domain.event.repository.EventRepository;
 import lombok.AllArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,25 +18,19 @@ import java.util.List;
 public class EventService {
     private final EventRepository eventRepository;
 
-    public EventResponseDto saveEvent(EventSaveRequestDto eventSaveRequestDto){
-        EventResponseDto result = eventRepository.saveEvent(eventSaveRequestDto.toEntity());
-        return result;
+    public void saveEvent(EventSaveRequestDto eventSaveRequestDto){
+        eventRepository.saveEvent(eventSaveRequestDto);
     }
 
-    public EventResponseDto updateEvent(EventRequestDto eventRequestDto){
-        Event event = eventRepository.findEventById(eventRequestDto.getEventId());
-        event.updateEvent(eventRequestDto.getEventName());
-        EventResponseDto result = eventRepository.updateTodo(event);
-        return result;
+    public void updateEvent(EventRequestDto eventRequestDto){
+       eventRepository.updateEvent(eventRequestDto);
     }
 
-    public EventResponseDto deleteEvent(EventRequestDto eventRequestDto){
-        Event event = eventRepository.findEventById(eventRequestDto.getEventId());
-        EventResponseDto result = eventRepository.deleteTodo(event);
-        return result;
+    public void deleteEvent(Long eventId){
+        eventRepository.deleteEvent(eventId);
     }
 
-    public List<EventResponseDto> findEventByDay(Long memberId, LocalDateTime date) {
+    public List<EventResponseDto> findEventByDay(@Param("memberId") Long memberId, @Param("date") LocalDate date) {
         return eventRepository.findEventByDay(memberId, date);
     }
 

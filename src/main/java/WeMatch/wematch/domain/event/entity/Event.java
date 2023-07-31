@@ -2,6 +2,7 @@ package WeMatch.wematch.domain.event.entity;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
