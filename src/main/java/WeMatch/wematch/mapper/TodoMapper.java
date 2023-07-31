@@ -1,5 +1,6 @@
 package WeMatch.wematch.mapper;
 
+import WeMatch.wematch.domain.todo.dto.TodoRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
 import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
 import WeMatch.wematch.domain.todo.entity.Todo;
@@ -13,19 +14,19 @@ import java.util.List;
 public interface TodoMapper {
 
     // Todo 생성
-    TodoResponseDto saveTodo(TodoSaveRequestDto todoSaveRequestDto);
+    void saveTodo(TodoSaveRequestDto todoSaveRequestDto);
 
     // Todo 삭제
-    TodoResponseDto deleteTodo(Todo todo);
+    void deleteTodo(TodoRequestDto todo);
 
     // Todo 완료 체크
-    TodoResponseDto checkTodo(Todo todo);
+    void checkTodo(TodoRequestDto todo);
 
     // Todo 수정
-    TodoResponseDto updateTodo(Todo todo);
+    void updateTodo(TodoRequestDto todo);
 
-    // Todo (memberId, TodoId)로 조회
-    Todo findTodoById(Long todoId);
+    // Todo TodoId로 조회
+    TodoResponseDto findTodoById(Long todoId);
 
     List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate todo_schedule);
 

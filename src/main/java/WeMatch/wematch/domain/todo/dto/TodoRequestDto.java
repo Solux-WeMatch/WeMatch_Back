@@ -15,12 +15,14 @@ public class TodoRequestDto {
     private Long memberId;
     private String todoName;
     private LocalDate todo_schedule;
+    private boolean if_done;
 
     @Builder
-    public TodoRequestDto(Long todoId, Long memberId, String todoName, LocalDate todo_schedule) {
+    public TodoRequestDto(Long todoId, Long memberId, String todoName, LocalDate todo_schedule, boolean if_done) {
         this.todoId = todoId;
         this.memberId = memberId;
         this.todoName = todoName;
         this.todo_schedule = todo_schedule;
+        this.if_done = if_done;
     }
 }

@@ -1,6 +1,7 @@
 package WeMatch.wematch.domain.todo.repository;
 
 import WeMatch.wematch.domain.event.dto.EventResponseDto;
+import WeMatch.wematch.domain.todo.dto.TodoRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
 import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
 import WeMatch.wematch.domain.todo.entity.Todo;
@@ -18,24 +19,20 @@ public class TodoRepository {
 
     public TodoMapper todoDAO;
 
-    public TodoResponseDto saveTodo(TodoSaveRequestDto todoSaveRequestDto){
-        TodoResponseDto result = todoDAO.saveTodo(todoSaveRequestDto);
-        return result;
+    public void saveTodo(TodoSaveRequestDto todoSaveRequestDto){
+        todoDAO.saveTodo(todoSaveRequestDto);
     }
 
-    public TodoResponseDto updateTodo(Todo todo){
-        TodoResponseDto result = todoDAO.updateTodo(todo);
-        return result;
+    public void updateTodo(TodoRequestDto todo){
+        todoDAO.updateTodo(todo);
     }
 
-    public TodoResponseDto checkTodo(Todo todo){
-        TodoResponseDto result = todoDAO.checkTodo(todo);
-        return result;
+    public void checkTodo(TodoRequestDto todo){
+        todoDAO.checkTodo(todo);
     }
 
-    public TodoResponseDto deleteTodo(Todo todo){
-        TodoResponseDto result = todoDAO.deleteTodo(todo);
-        return result;
+    public void deleteTodo(TodoRequestDto todo){
+        todoDAO.deleteTodo(todo);
     }
 
     public List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate todo_schedule){
@@ -43,8 +40,8 @@ public class TodoRepository {
         return todo;
     }
 
-    public Todo findTodoById(Long todoId){
-        Todo todo = todoDAO.findTodoById(todoId);
+    public TodoResponseDto findTodoById(Long todoId){
+        TodoResponseDto todo = todoDAO.findTodoById(todoId);
         return todo;
     }
 

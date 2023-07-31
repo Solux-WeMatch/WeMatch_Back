@@ -22,25 +22,30 @@ public class TodoController {
 
     @PostMapping("/save")
     public Response saveTodo(@RequestBody TodoSaveRequestDto todoSaveRequestDto){
-        TodoResponseDto result = todoService.saveTodo(todoSaveRequestDto);
+        todoService.saveTodo(todoSaveRequestDto);
+        // TodoResponseDto result = todoService.findById(todoSaveRequestDto);
+        TodoSaveRequestDto result = todoSaveRequestDto;
         return Response.success(SUCCESS_TODO_SAVE, result);
     }
 
     @PutMapping("/update")
     public Response updateTodo(@RequestBody TodoRequestDto todoRequestDto){
-        TodoResponseDto result = todoService.updateTodo(todoRequestDto);
+        todoService.updateTodo(todoRequestDto);
+        TodoRequestDto result = todoRequestDto;
         return Response.success(SUCCESS_TODO_UPDATE, result);
     }
 
     @PutMapping("/check")
     public Response checkTodo(@RequestBody TodoRequestDto todoRequestDto){
-        TodoResponseDto result = todoService.checkTodo(todoRequestDto);
+        todoService.checkTodo(todoRequestDto);
+        TodoRequestDto result = todoRequestDto;
         return Response.success(SUCCESS_TODO_CHECK, result);
     }
 
     @DeleteMapping("/delete")
     public Response deleteTodo(@RequestBody TodoRequestDto todoRequestDto){
-        TodoResponseDto result = todoService.deleteTodo(todoRequestDto);
+        todoService.deleteTodo(todoRequestDto);
+        TodoRequestDto result = todoRequestDto;
         return Response.success(SUCCESS_TODO_DELETE, result);
     }
 

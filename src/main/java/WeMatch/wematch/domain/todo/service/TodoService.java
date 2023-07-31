@@ -8,7 +8,6 @@ import WeMatch.wematch.domain.todo.repository.TodoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,33 +16,28 @@ import java.util.List;
 public class TodoService {
     private final TodoRepository todoRepository;
 
-    public TodoResponseDto saveTodo(TodoSaveRequestDto todoSaveRequestDto){
-        TodoResponseDto result = todoRepository.saveTodo(todoSaveRequestDto);
-        return result;
+    public void saveTodo(TodoSaveRequestDto todoSaveRequestDto){
+        todoRepository.saveTodo(todoSaveRequestDto);
     }
 
-    public TodoResponseDto updateTodo(TodoRequestDto todoRequestDto){
-        Todo todo = todoRepository.findTodoById(todoRequestDto.getTodoId());
-        todo.updateTodo(todoRequestDto.getTodoName());
-        TodoResponseDto result = todoRepository.updateTodo(todo);
-        return result;
+    public void updateTodo(TodoRequestDto todoRequestDto){
+        //TodoResponseDto todo = todoRepository.findTodoById(todoRequestDto.getTodoId());
+        todoRepository.updateTodo(todoRequestDto);
     }
 
-    public TodoResponseDto checkTodo(TodoRequestDto todoRequestDto){
-        Todo todo = todoRepository.findTodoById(todoRequestDto.getTodoId());
-        TodoResponseDto result = todoRepository.checkTodo(todo);
-        return result;
+    public void checkTodo(TodoRequestDto todoRequestDto){
+        // TodoResponseDto todo = todoRepository.findTodoById(todoRequestDto.getTodoId());
+        todoRepository.checkTodo(todoRequestDto);
     }
 
-    public TodoResponseDto deleteTodo(TodoRequestDto todoRequestDto){
-        Todo todo = todoRepository.findTodoById(todoRequestDto.getTodoId());
-        TodoResponseDto result = todoRepository.deleteTodo(todo);
-        return result;
+    public void deleteTodo(TodoRequestDto todoRequestDto){
+        // TodoResponseDto todo = todoRepository.findTodoById(todoRequestDto.getTodoId());
+        todoRepository.deleteTodo(todoRequestDto);
     }
 
-    public TodoResponseDto findById(TodoRequestDto todoRequestDto) {
-        Todo entity = todoRepository.findTodoById(todoRequestDto.getTodoId());
-        return new TodoResponseDto(entity);
+    public TodoResponseDto findById(TodoSaveRequestDto todoRequestDto) {
+        TodoResponseDto entity = todoRepository.findTodoById(todoRequestDto.getTodoId());
+        return entity;
     }
 
     public List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate todoSchedule) {
