@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WeMatch.wematch.mapper.EventMapper">
+
+    <insert id="saveEvent">
+        insert into event_test(event_id, member_id, eventname, start_schedule, end_schedule) values(#{eventId}, #{memberId}, #{eventName}, #{start_schedule}, #{end_schedule});
+    </insert>
+
+    <delete id="deleteEvent">
+        delete from event_test where event_id=#{eventId}
+    </delete>
+
+    <update id="updateEvent">
+        update event_test set eventname=#{eventName}, start_schedule=#{start_schedule}, end_schedule=#{end_schedule} where event_id=#{eventId}
+    </update>
+
+
+    <select id="findEventById">
+        select * from event_test where event_id=#{eventID}
+    </select>
+
+    <select id="findEventByDay" resultType="WeMatch.wematch.domain.event.dto.EventResponseDto">
+        select * from event_test where member_id=#{memberId} and DATE(start_schedule)=#{date}
+    </select>
+
+    <select id="findEventByWeek">
+
+    </select>
+
+    <select id="findEventByMonth">
+        select * from event_test where member_id=#{memberId} and DATE_FORMAT(start_schedule,'%m')=#{date.getMonthValue()}
+    </select>
+
+</mapper>
+
