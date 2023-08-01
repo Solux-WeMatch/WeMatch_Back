@@ -45,12 +45,13 @@ public class TeamRepository {
     public List<Long> getMembers(Long candidateId) {
         return teamDAO.getTeamMembersByCandidate(candidateId);
     }
-    public GetFixedTimeDto getFixedTimeDto(Long candidateId) {
-        return teamDAO.getFixedTimeDto(candidateId);
-    }
-    public void insertFixedTime(List<Long> members, GetFixedTimeDto getFixedTimeDto) {
+    public String getTeamNameByCandidateId(Long candidateId) {return teamDAO.getTeamNameByCandidateId(candidateId);}
+    public CandidateResponseDto getFixedDate(Long candidateId) {return teamDAO.getFixedDate(candidateId);}
+    public void insertFixedTime(List<Long> members,String teamName,InsertFixedTimeRequestDto insertFixedTimeRequestDto) {
         for(Long memberId:members) {
-            teamDAO.insertFixedTime(memberId, getFixedTimeDto);
+            teamDAO.insertFixedTime(memberId, teamName,insertFixedTimeRequestDto);
         }
     }
+
+    public InsertFixedTimeRequestDto getCandidate(Long candidateId) {return teamDAO.getCandidate(candidateId);}
 }

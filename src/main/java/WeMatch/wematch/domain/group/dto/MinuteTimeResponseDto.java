@@ -8,4 +8,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class MinuteTimeResponseDto {
+    private int minute;
 }

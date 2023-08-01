@@ -15,14 +15,6 @@ public class TeamService {
     private final TeamRepository teamRepository;
 
     public List<TeamEventsResponseDto> getEvents(Long groupId) {
-        //보류 -> 그냥 바로 dto로 받아올 수 있을 것 같음 : List<dto>
-        //대신 mybatis resultType 다시 한 번 검토해야 함
-        /*Map<String, String> events = new HashMap<>();
-        Long[] memberList = groupRepository.getMembers(groupId);
-        for(Long memberId:memberList) {
-            events=groupRepository.getEvent(memberId);
-        }*/
-
         List<TeamEventsResponseDto> results = teamRepository.getEvent(groupId);
         return results;
     }
@@ -59,9 +51,20 @@ public class TeamService {
         return teamRepository.getMinute(groupId);
     }
 
-    public void insertFixedTime(Long candidateId) {
+    public void insertFixedTime(InsertFixedTimeRequestDto insertFixedTimeRequestDto,Long candidateId) {
         List<Long> members = teamRepository.getMembers(candidateId);
-        GetFixedTimeDto getFixedTimeDto = teamRepository.getFixedTimeDto(candidateId);
-        teamRepository.insertFixedTime(members,getFixedTimeDto);
+        String teamName = teamRepository.getTeamNameByCandidateId(candidateId);
+        //GetFixedTimeRequestDto getDate = teamRepository.getFixedDate(candidateId);
+        teamRepository.insertFixedTime(members,teamName,insertFixedTimeRequestDto);
+    }
+
+    public CandidateResponseDto getCandidate(Long candidateId) {
+        InsertFixedTimeRequestDto candidate =  teamRepository.getCandidate(candidateId);
+        return CandidateResponseDto.builder()
+                .startDate(candidate.getStartAt().toLocalDate())
+                .startAt(candidate.getStartAt().toLocalTime())
+                .endAt(candidate.getEndAt().toLocalTime())
+                .build();
     }
 }
+

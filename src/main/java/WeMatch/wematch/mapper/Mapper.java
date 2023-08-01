@@ -1,9 +1,6 @@
 package WeMatch.wematch.mapper;
 
-import WeMatch.wematch.domain.group.dto.GetFixedTimeDto;
-import WeMatch.wematch.domain.group.dto.MinuteTimeResponseDto;
-import WeMatch.wematch.domain.group.dto.SleepTimeDto;
-import WeMatch.wematch.domain.group.dto.TeamEventsResponseDto;
+import WeMatch.wematch.domain.group.dto.*;
 import WeMatch.wematch.domain.member.entity.Member;
 
 import java.util.List;
@@ -23,7 +20,7 @@ public interface Mapper {
     Member findByEmail(String email);
 
     //groupId -> memberId -> event : TeamEventResponseDto
-    List<TeamEventsResponseDto> getEvent(Long groupId);
+    List<TeamEventsResponseDto> getEvent(Long teamId);
 
     List<String> getTeamMembers(Long groupId);
     String getTeamName(Long groupId);
@@ -34,9 +31,10 @@ public interface Mapper {
     void insertMinute(Long groupId,int minute);
     MinuteTimeResponseDto getMinute(Long groupId);
 
-    void insertFixedTime(Long memberId, GetFixedTimeDto getFixedTimeDto);
-    List<Long> getTeamMembersId(Long groupId);
+    void insertFixedTime(Long memberId,String teamName, InsertFixedTimeRequestDto insertFixedTimeRequestDto);
+    CandidateResponseDto getFixedDate(Long candidateId);
     List<Long> getTeamMembersByCandidate(Long candidateId);
-    Long getTeam(Long candidateId);
-    GetFixedTimeDto getFixedTimeDto(Long candidateId);
+    String getTeamNameByCandidateId(Long candidateId);
+
+    InsertFixedTimeRequestDto getCandidate(Long candidateId);
 }
