@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WeMatch.wematch.mapper.Mapper">
+
+    <select id="ifExists" resultType="boolean">
+        select count(*) from Member where email=#{email}
+    </select>
+
+    <select id="test" resultType="String" >
+        select email from Member where name=#{name}
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into Member(email,password,name,role) values(#{email},#{password},#{name},#{role})
+    </insert>
+
+    <select id="findByEmail" resultType="WeMatch.wematch.domain.member.entity.Member">
+        select * from Member where email=#{email}
+    </select>
+
+    <select id="getEvent" resultType="WeMatch.wematch.domain.group.dto.TeamEventsResponseDto">
+        select as eventStartAt, as eventEndAt, as evnetId, as memberId
+        from event
+        where member_id=#{id}
+    </select>
+
+    <select id="getTeamMembers" resultType="String">
+        select m.name
+        from team_member g
+        join member m on m.id=g.member_id
+        where group_id=#{groupId}
+    </select>
+    <select id="getTeamMembersId" resultType="String">
+        select m.member_id
+        from team_member g
+        join member m on m.id=g.member_id
+        where group_id=#{groupId}
+    </select>
+    <select id="getTeamName" resultType="String">
+        select groupname
+        from team
+        where group_id=1
+    </select>
+
+    <update id="insertMinute">
+        UPDATE team
+        SET minute_schedule=#{minute}
+        WHERE team_id=#{groupId};
+    </update>
+
+    <select id="getMinute" resultType="WeMatch.wematch.domain.group.dto.MinuteTimeResponseDto">
+        select minute_schedule
+        from team
+        where team_id=#{groupId}
+    </select>
+
+    <select id="getTeamMembersByCandidate" resultType="Long">
+        select t.member_id
+        from candidate c
+            join team_member as t
+            on c.team_id=t.team_id
+        where c.candidate_id=#{candidateId}
+    </select>
+    <select id="getFixedTimeDto" resultType="WeMatch.wematch.domain.group.dto.GetFixedTimeDto">
+        select t.teamname, c.startAt as startAt, c.endAt as endAt
+        from candidate as c
+            join team as t
+            on c.team_id=t.team_id
+        where c.candidate_id=#{candidateId}
+    </select>
+
+    <insert id="insertFixedTime" useGeneratedKeys="true" keyProperty="id">
+        insert into event
+        values(#{memberId},#{getFixedTimeDto.eventName},#{getFixedTimeDto.startAt},#{getFixedTimeDto.endAt})
+    </insert>
+</mapper>
