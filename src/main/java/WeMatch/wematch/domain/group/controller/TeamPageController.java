@@ -44,15 +44,15 @@ public class TeamPageController {
         return success(SUCCESS_GET_SLEEP,teamService.getSleep(groupId));
     }
 
-    @PostMapping("/minute")
-    public Response insertMinute(@RequestParam Long id,
+    @PatchMapping("/minute")
+    public Response insertMinute(@RequestParam Long groupId,
                                  @RequestParam int minute) {
-        teamService.insertMinute(id,minute);
+        teamService.insertMinute(groupId,minute);
         return success(SUCCESS_TO_INSERT_MINUTE);
     }
 
     @GetMapping("/minute")
-    public Response getMinute(@RequestParam Long id) {
-        return success(SUCCESS_TO_GET_MINUTE,teamService.getMinute(id));
+    public Response getMinute(@RequestParam Long groupId) {
+        return success(SUCCESS_TO_GET_MINUTE,teamService.getMinute(groupId));
     }
 }

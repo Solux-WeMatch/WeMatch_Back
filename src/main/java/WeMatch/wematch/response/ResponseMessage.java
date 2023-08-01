@@ -23,4 +23,8 @@ public class ResponseMessage {
     public static final String SUCCESS_EVENT_SAVE="Event 생성 성공";
     public static final String SUCCESS_EVENT_UPDATE="Event 수정 성공";
     public static final String SUCCESS_EVENT_DELETE="Event 삭제 성공";
+
+    public static final String SUCCESS_TO_INSERT_FIXED_TIME="일정 확정 성공";
+    public static final String SUCCESS_TO_GET_CANDIDATE = "후보시간 정보 불러오기 성공";
+
 }
