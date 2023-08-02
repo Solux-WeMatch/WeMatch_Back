@@ -19,8 +19,8 @@
     </select>
 
     <select id="getEvent" resultType="WeMatch.wematch.domain.group.dto.TeamEventsResponseDto">
-        select as eventStartAt, as eventEndAt, as evnetId, as memberId
-        from event
+        select as eventStartAt, as eventEndAt, as eventId, as memberId
+        from event_test
         where member_id=#{id}
     </select>
 
@@ -73,4 +73,27 @@
         insert into event
         values(#{memberId},#{getFixedTimeDto.eventName},#{getFixedTimeDto.startAt},#{getFixedTimeDto.endAt})
     </insert>
+
+    <select id="getTeamList" resultType="WeMatch.wematch.domain.member.dto.TeamListResponseDto">
+        SELECT t.team_id as groupId, t.teamname as groupName
+        FROM Team t
+        JOIN Team_Member tm ON t.team_id = tm.team_id
+        WHERE tm.member_id = #{memberId};
+    </select>
+
+    <insert id="createTeam">
+        insert into Team(team_id, teamname) values(#{teamId}, #{teamName})
+    </insert>
+
+    <insert id="saveTeam">
+        insert into Team_Member(team_id, member_id) values(#{groupId}, #{memberId})
+    </insert>
+
+    <delete id="exitTeam">
+        delete from Team_Member where team_id=#{groupId} and member_id=#{memberId}
+    </delete>
+
+    <delete id="deleteTeam">
+        delete from Team where team_id=#{groupId} CASCADE
+    </delete>
 </mapper>
