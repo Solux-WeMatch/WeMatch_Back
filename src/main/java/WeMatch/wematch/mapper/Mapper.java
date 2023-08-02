@@ -37,4 +37,7 @@ public interface Mapper {
     String getTeamNameByCandidateId(Long candidateId);
 
     InsertFixedTimeRequestDto getCandidate(Long candidateId);
+
+    void deleteCandidates(Long groupId);
+    void insertCandidates(Long groupId, List<TeamEventsResponseDto> results);
 }

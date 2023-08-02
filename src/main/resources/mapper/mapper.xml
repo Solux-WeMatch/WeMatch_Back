@@ -102,4 +102,19 @@
         from candidate
         where candidate_id=#{candidateId}
     </select>
+
+    <delete id="deleteCandidates">
+        delete from candidate
+        where team_id=#{groupId}
+    </delete>
+
+    <insert id="insertCandidates" parameterType="WeMatch.wematch.domain.group.dto.TeamEventsResponseDto">
+        insert into candidate(team_id,start_schedule,end_schedule)
+        values
+        <foreach collection="results" item="results" index="index" separator=",">
+            (#{groupId},#{results.eventStartAt},#{results.eventEndAt})
+        </foreach>
+    </insert>
+
+
 </mapper>

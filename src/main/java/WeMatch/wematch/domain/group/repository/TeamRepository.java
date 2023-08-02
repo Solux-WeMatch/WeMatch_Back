@@ -54,4 +54,7 @@ public class TeamRepository {
     }
 
     public InsertFixedTimeRequestDto getCandidate(Long candidateId) {return teamDAO.getCandidate(candidateId);}
+
+    public void deleteCandidates(Long groupId) {teamDAO.deleteCandidates(groupId);}
+    public void insertCandidates(Long groupId,List<TeamEventsResponseDto> results) {teamDAO.insertCandidates(groupId,results);}
 }

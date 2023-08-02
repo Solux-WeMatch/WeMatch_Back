@@ -11,6 +11,7 @@ import java.util.List;
 
 import static WeMatch.wematch.response.Response.success;
 import static WeMatch.wematch.response.ResponseMessage.*;
+import static WeMatch.wematch.response.ResponseMessage.SUCCESS_TO_GET_CANDIDATES;
 
 @RestController
 @AllArgsConstructor
@@ -54,5 +55,9 @@ public class TeamPageController {
     @GetMapping("/minute")
     public Response getMinute(@RequestParam Long groupId) {
         return success(SUCCESS_TO_GET_MINUTE,teamService.getMinute(groupId));
+    }
+    @GetMapping("/candidate")
+    public Response getCandidates(@RequestParam Long groupId) {
+        return success(SUCCESS_TO_GET_CANDIDATES,teamService.getCandidates(groupId));
     }
 }

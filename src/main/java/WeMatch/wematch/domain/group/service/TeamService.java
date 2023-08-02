@@ -5,9 +5,11 @@ import WeMatch.wematch.domain.group.repository.TeamRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.WeekFields;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -19,12 +21,12 @@ public class TeamService {
         return results;
     }
 
-    public List<TeamEventsResponseDto> getResult(List<TeamEventsResponseDto> events,int weekNumber,int year) {
+    public List<TeamEventsResponseDto> getResult(List<TeamEventsResponseDto> events, int weekNumber, int year) {
         Iterator<TeamEventsResponseDto> iterator = events.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             TeamEventsResponseDto event = iterator.next();
-            if(event.getEventStartAt().toLocalDate().get(WeekFields.ISO.weekOfYear())!=weekNumber
-                    || event.getEventStartAt().getYear()!=year) {
+            if (event.getEventStartAt().toLocalDate().get(WeekFields.ISO.weekOfYear()) != weekNumber
+                    || event.getEventStartAt().getYear() != year) {
                 iterator.remove();
             }
         }
@@ -43,28 +45,163 @@ public class TeamService {
         return teamRepository.getSleep(groupId);
     }
 
-    public void insertMinute(Long groupId,int minute) {
-        teamRepository.insertMinute(groupId,minute);
+    public void insertMinute(Long groupId, int minute) {
+        teamRepository.insertMinute(groupId, minute);
 
     }
-    public MinuteTimeResponseDto getMinute(Long groupId){
+
+    public MinuteTimeResponseDto getMinute(Long groupId) {
         return teamRepository.getMinute(groupId);
     }
 
-    public void insertFixedTime(InsertFixedTimeRequestDto insertFixedTimeRequestDto,Long candidateId) {
+    public void insertFixedTime(InsertFixedTimeRequestDto insertFixedTimeRequestDto, Long candidateId) {
         List<Long> members = teamRepository.getMembers(candidateId);
         String teamName = teamRepository.getTeamNameByCandidateId(candidateId);
         //GetFixedTimeRequestDto getDate = teamRepository.getFixedDate(candidateId);
-        teamRepository.insertFixedTime(members,teamName,insertFixedTimeRequestDto);
+        teamRepository.insertFixedTime(members, teamName, insertFixedTimeRequestDto);
     }
 
     public CandidateResponseDto getCandidate(Long candidateId) {
-        InsertFixedTimeRequestDto candidate =  teamRepository.getCandidate(candidateId);
+        InsertFixedTimeRequestDto candidate = teamRepository.getCandidate(candidateId);
         return CandidateResponseDto.builder()
                 .startDate(candidate.getStartAt().toLocalDate())
                 .startAt(candidate.getStartAt().toLocalTime())
                 .endAt(candidate.getEndAt().toLocalTime())
                 .build();
     }
-}
 
+    public List<TeamEventsResponseDto> getCandidates(Long groupId) {
+        List<TeamEventsResponseDto> results = teamRepository.getEvent(groupId);
+        List<TeamEventsResponseDto> results2 = teamRepository.getEvent(groupId);
+        //startAt으로 정렬
+        Collections.sort(results2, Comparator.comparing(TeamEventsResponseDto::getEventStartAt));
+
+        //delete
+        teamRepository.deleteCandidates(groupId);
+        //getCandidates
+        results = getBlankTime(results);
+        results = setFirstLast(results, results2, groupId);
+        results = deleteSleepTime(results, groupId);
+        //insertCandidates
+        teamRepository.insertCandidates(groupId,results);
+        return results;
+    }
+
+    public List<TeamEventsResponseDto> getBlankTime(List<TeamEventsResponseDto> events) {
+        List<TeamEventsResponseDto> missingTimeIntervals = new ArrayList<>();
+
+
+        if (events.isEmpty()) {
+            // 모든 시간대가 없는 경우
+            missingTimeIntervals.add(
+                    TeamEventsResponseDto.builder()
+                            .eventStartAt(LocalDateTime.MIN)
+                            .eventEndAt(LocalDateTime.MAX)
+                            .build());
+            return missingTimeIntervals;
+        }
+
+        events.sort((event1, event2) -> event1.getEventStartAt().compareTo(event2.getEventStartAt()));
+
+        LocalDateTime startTime = events.get(0).getEventStartAt();
+        LocalDateTime endTime = events.get(0).getEventEndAt();
+
+        for (int i = 1; i < events.size(); i++) {
+            LocalDateTime nextStartTime = events.get(i).getEventStartAt();
+            LocalDateTime nextEndTime = events.get(i).getEventEndAt();
+
+            if (endTime.isBefore(nextStartTime)) {
+                // 이벤트 간의 빈 구간이 존재
+                missingTimeIntervals.add(TeamEventsResponseDto.builder()
+                        .eventStartAt(endTime)
+                        .eventEndAt(nextStartTime)
+                        .build());
+            }
+
+            if (nextEndTime.isAfter(endTime)) {
+                // 이벤트 시간 갱신
+                endTime = nextEndTime;
+            }
+        }
+
+        return missingTimeIntervals;
+    }
+
+    public List<TeamEventsResponseDto> deleteSleepTime(List<TeamEventsResponseDto> results, Long groupId) {
+        SleepTimeDto sleepTime = getSleep(groupId);
+        LocalTime startSleep = sleepTime.getStartAt();LocalTime endSleep = sleepTime.getEndAt();
+        //각 날짜별로 가장 이른 후보시간의 index 불러옴
+        List<Integer> earliestTimes = getEarliestTimes(results);
+        //각 날짜별로 가장 늦은 후보시간의 index 불러옴
+        List<Integer> lastTimes = getLastTimes(results);
+
+
+        //그 후보시간의 startAt.isBefore sleepTime의 endAt
+        for (int i = 0; i < results.size(); i++) {
+            if(earliestTimes.contains(i)) {
+                if (results.get(i).getEventStartAt().toLocalTime().isBefore(endSleep)) {
+                    //-> 후보시간.startAt = sleepTime.endAt
+                    results.get(i).setEventStartAt(LocalDateTime.of(results.get(i).getEventStartAt().toLocalDate(), endSleep));
+                }
+            }
+        }
+
+        // OR 후보시간의 endAt.isAfter sleepTime의 startAt
+        for (int i = 0; i < results.size(); i++) {
+            if(lastTimes.contains(i)) {
+                if (results.get(i).getEventEndAt().toLocalTime().isAfter(startSleep)) {
+                    //-> 후보시간.endAt = sleepTime.startAt
+                    results.get(i).setEventEndAt(LocalDateTime.of(results.get(i).getEventEndAt().toLocalDate(), startSleep));
+                }
+            }
+        }
+        return results;
+    }
+
+    private List<Integer> getLastTimes(List<TeamEventsResponseDto> results) {
+        List<Integer> lastTimes = results.stream()
+                .collect(Collectors.groupingBy(dto -> dto.getEventStartAt().toLocalDate(),
+                        Collectors.maxBy(Comparator.comparing(TeamEventsResponseDto::getEventEndAt))))
+                .values()
+                .stream()
+                .map(opt -> opt.orElse(null))
+                .map(results::indexOf)
+                .collect(Collectors.toList());
+        for(Integer i :lastTimes) {
+            System.out.println("l : "+i);
+        }
+        return lastTimes;
+    }
+
+    private List<Integer> getEarliestTimes(List<TeamEventsResponseDto> results) {
+        List<Integer> earliestTimes = results.stream()
+                .collect(Collectors.groupingBy(dto -> dto.getEventStartAt().toLocalDate(),
+                        Collectors.minBy(Comparator.comparing(TeamEventsResponseDto::getEventStartAt))))
+                .values()
+                .stream()
+                .map(opt -> opt.orElse(null))
+                .map(results::indexOf)
+                .collect(Collectors.toList());
+        for(Integer i : earliestTimes) {
+            System.out.println("e : "+i);
+        }
+        return earliestTimes;
+    }
+
+    public List<TeamEventsResponseDto> setFirstLast (List < TeamEventsResponseDto > results, List < TeamEventsResponseDto > events, Long groupId){
+        TeamEventsResponseDto dtoSetFirst = TeamEventsResponseDto.builder()
+                .eventStartAt(LocalDateTime.of(events.get(0).getEventStartAt().toLocalDate(), LocalTime.of(0, 0)))
+                .eventEndAt(events.get(0).getEventStartAt())
+                .build();
+        results.add(0, dtoSetFirst);
+
+        int lastIdx = events.size() - 1;
+        TeamEventsResponseDto dtoSetLast = TeamEventsResponseDto.builder()
+                .eventStartAt(events.get(lastIdx).getEventEndAt())
+                .eventEndAt(LocalDateTime.of(events.get(lastIdx).getEventStartAt().toLocalDate().plusDays(1), LocalTime.of(0, 0)))
+                .build();
+        results.add(dtoSetLast);
+        return results;
+
+    }
+}
