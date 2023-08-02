@@ -2,11 +2,15 @@ package WeMatch.wematch.domain.group.service;
 
 import WeMatch.wematch.domain.group.dto.*;
 import WeMatch.wematch.domain.group.repository.TeamRepository;
+import WeMatch.wematch.domain.member.dto.TeamCreateRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -203,5 +207,23 @@ public class TeamService {
         results.add(dtoSetLast);
         return results;
 
+    }
+
+    // team 새로 생성
+    public void createTeam(TeamCreateRequestDto teamCreateRequestDto){
+        teamRepository.createTeam(teamCreateRequestDto);
+    }
+
+    // team 테이블에 memberId 입력
+    public void saveTeam(Long groupId, Long memberId){
+        teamRepository.saveTeam(groupId, memberId);
+    }
+
+    public void exitTeam(Long groupId, Long memberId){
+        teamRepository.exitTeam(groupId, memberId);
+    }
+
+    public void deleteTeam(Long groupId){
+        teamRepository.deleteTeam(groupId);
     }
 }

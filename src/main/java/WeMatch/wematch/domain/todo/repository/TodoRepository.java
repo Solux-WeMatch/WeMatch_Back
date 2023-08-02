@@ -1,6 +1,7 @@
 package WeMatch.wematch.domain.todo.repository;
 
 import WeMatch.wematch.domain.event.dto.EventResponseDto;
+import WeMatch.wematch.domain.todo.dto.TodoListRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
 import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
@@ -35,9 +36,8 @@ public class TodoRepository {
         todoDAO.deleteTodo(todo);
     }
 
-    public List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate todo_schedule){
-        List<TodoResponseDto> todo = todoDAO.findTodoByIdDate(memberId, todo_schedule);
-        return todo;
+    public List<TodoResponseDto> findTodoByIdDate(TodoListRequestDto TodoListRequestDto){
+        return todoDAO.findTodoByIdDate(TodoListRequestDto);
     }
 
     public TodoResponseDto findTodoById(Long todoId){

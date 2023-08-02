@@ -1,5 +1,6 @@
 package WeMatch.wematch.domain.todo.service;
 
+import WeMatch.wematch.domain.todo.dto.TodoListRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
 import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
@@ -40,7 +41,7 @@ public class TodoService {
         return entity;
     }
 
-    public List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate todoSchedule) {
-        return (List<TodoResponseDto>) todoRepository.findTodoByIdDate(memberId, todoSchedule);
+    public List<TodoResponseDto> findTodoByIdDate(TodoListRequestDto TodoListRequestDto) {
+        return todoRepository.findTodoByIdDate(TodoListRequestDto);
     }
 }
