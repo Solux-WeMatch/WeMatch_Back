@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -86,6 +87,7 @@ public class TeamService {
         results = getBlankTime(results);
         results = setFirstLast(results, results2, groupId);
         results = deleteSleepTime(results, groupId);
+        results = deleteMinuteTime(results,teamRepository.getMinute(groupId).getMinute());
         //insertCandidates
         teamRepository.insertCandidates(groupId,results);
         return results;
@@ -171,9 +173,6 @@ public class TeamService {
                 .map(opt -> opt.orElse(null))
                 .map(results::indexOf)
                 .collect(Collectors.toList());
-        for(Integer i :lastTimes) {
-            System.out.println("l : "+i);
-        }
         return lastTimes;
     }
 
@@ -186,9 +185,6 @@ public class TeamService {
                 .map(opt -> opt.orElse(null))
                 .map(results::indexOf)
                 .collect(Collectors.toList());
-        for(Integer i : earliestTimes) {
-            System.out.println("e : "+i);
-        }
         return earliestTimes;
     }
 
@@ -207,6 +203,18 @@ public class TeamService {
         results.add(dtoSetLast);
         return results;
 
+    }
+    public List<TeamEventsResponseDto> deleteMinuteTime(List<TeamEventsResponseDto> results, int minute) {
+
+        Iterator<TeamEventsResponseDto> iterator = results.iterator();
+        while (iterator.hasNext()) {
+            TeamEventsResponseDto item = iterator.next();
+            Duration duration = Duration.between(item.getEventStartAt(), item.getEventEndAt());
+            if (minute>duration.toMinutes()) {
+                iterator.remove(); // 요소 삭제
+            }
+        }
+        return results;
     }
 
     // team 새로 생성
