@@ -19,6 +19,7 @@
     </select>
 
     <select id="getEvent" resultType="WeMatch.wematch.domain.group.dto.TeamEventsResponseDto">
+
         SELECT
         e.member_id AS memberId,
         e.event_id AS eventId,
@@ -27,6 +28,7 @@
         FROM event e
         JOIN team_member tm ON tm.member_id = e.member_id
         WHERE tm.team_id = #{teamId}
+
     </select>
 
     <select id="getTeamMembers" resultType="String">
@@ -97,9 +99,49 @@
         values(#{memberId},#{teamName},#{insertFixedTimeRequestDto.startAt},#{insertFixedTimeRequestDto.endAt})
     </insert>
 
+
     <select id="getCandidate" resultType="WeMatch.wematch.domain.group.dto.InsertFixedTimeRequestDto">
         select start_schedule as startAt, end_schedule as endAt
         from candidate
         where candidate_id=#{candidateId}
     </select>
+
+    <delete id="deleteCandidates">
+        delete from candidate
+        where team_id=#{groupId}
+    </delete>
+
+    <insert id="insertCandidates" parameterType="WeMatch.wematch.domain.group.dto.TeamEventsResponseDto">
+        insert into candidate(team_id,start_schedule,end_schedule)
+        values
+        <foreach collection="results" item="results" index="index" separator=",">
+            (#{groupId},#{results.eventStartAt},#{results.eventEndAt})
+        </foreach>
+    </insert>
+
+
+
+    <select id="getTeamList" resultType="WeMatch.wematch.domain.member.dto.TeamListResponseDto">
+        SELECT t.team_id as groupId, t.teamname as groupName
+        FROM Team t
+        JOIN Team_Member tm ON t.team_id = tm.team_id
+        WHERE tm.member_id = #{memberId};
+    </select>
+
+    <insert id="createTeam">
+        insert into Team(team_id, teamname) values(#{teamId}, #{teamName})
+    </insert>
+
+    <insert id="saveTeam">
+        insert into Team_Member(team_id, member_id) values(#{groupId}, #{memberId})
+    </insert>
+
+    <delete id="exitTeam">
+        delete from Team_Member where team_id=#{groupId} and member_id=#{memberId}
+    </delete>
+
+    <delete id="deleteTeam">
+        delete from Team where team_id=#{groupId} CASCADE
+    </delete>
+
 </mapper>

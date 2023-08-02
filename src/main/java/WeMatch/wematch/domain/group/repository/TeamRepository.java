@@ -1,10 +1,12 @@
 package WeMatch.wematch.domain.group.repository;
 
 import WeMatch.wematch.domain.group.dto.*;
+import WeMatch.wematch.domain.member.dto.TeamCreateRequestDto;
 import WeMatch.wematch.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -40,8 +42,6 @@ public class TeamRepository {
         return teamDAO.getMinute(groupId);
     }
 
-
-
     public List<Long> getMembers(Long candidateId) {
         return teamDAO.getTeamMembersByCandidate(candidateId);
     }
@@ -53,5 +53,28 @@ public class TeamRepository {
         }
     }
 
+
     public InsertFixedTimeRequestDto getCandidate(Long candidateId) {return teamDAO.getCandidate(candidateId);}
+
+    public void deleteCandidates(Long groupId) {teamDAO.deleteCandidates(groupId);}
+    public void insertCandidates(Long groupId,List<TeamEventsResponseDto> results) {teamDAO.insertCandidates(groupId,results);}
+
+
+    public void createTeam(TeamCreateRequestDto teamCreateRequestDto){
+        teamDAO.createTeam(teamCreateRequestDto);
+    }
+
+    public void saveTeam(Long groupId, Long memberId){
+        teamDAO.saveTeam(groupId, memberId);
+    }
+
+    public void exitTeam(Long groupId, Long memberId){
+        teamDAO.exitTeam(groupId, memberId);
+    }
+
+    public void deleteTeam(Long groupId){
+        teamDAO.deleteTeam(groupId);
+    }
+
 }
+

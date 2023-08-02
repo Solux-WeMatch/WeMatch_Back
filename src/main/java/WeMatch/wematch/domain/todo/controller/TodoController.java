@@ -1,6 +1,7 @@
 package WeMatch.wematch.domain.todo.controller;
 
 import WeMatch.wematch.domain.event.dto.EventResponseDto;
+import WeMatch.wematch.domain.todo.dto.TodoListRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
 import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
@@ -51,8 +52,8 @@ public class TodoController {
 
     // memberId가 id인 사용자의 date 날짜의 todo 조회
     @GetMapping
-    public Response findByIdDate(@RequestParam Long memberId, @RequestParam LocalDate todo_schedule){
-        List<TodoResponseDto> result = todoService.findTodoByIdDate(memberId, todo_schedule); // memberService의 memberId로 수정
+    public Response findByIdDate(@RequestBody TodoListRequestDto TodoListRequestDto){
+        List<TodoResponseDto> result = todoService.findTodoByIdDate(TodoListRequestDto); // memberService의 memberId로 수정
         return Response.success(SUCCESS, result);
     }
 }

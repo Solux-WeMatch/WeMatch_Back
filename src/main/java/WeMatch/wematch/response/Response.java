@@ -25,6 +25,10 @@ public class Response {
         return new Response(OK.value(), true,message,result);
     }
 
+    public static Response failure(String message) {
+        return new Response(false, 400,message,null);
+    }
+
     public static Response failure(HttpStatus status,String message) {
         return new Response(status.value(),false,message,null);
     }

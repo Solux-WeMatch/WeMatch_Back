@@ -1,10 +1,13 @@
 package WeMatch.wematch.domain.member.repository;
 
+import WeMatch.wematch.domain.member.dto.TeamListResponseDto;
 import WeMatch.wematch.domain.member.entity.Member;
 import WeMatch.wematch.mapper.Mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @AllArgsConstructor
@@ -29,6 +32,10 @@ public class MemberRepository {
             throw new BadCredentialsException("입력한 정보를 확인하세요");
         }
 
+    }
+
+    public List<TeamListResponseDto> getTeamList(Long memberId){
+        return memberDAO.getTeamList(memberId);
     }
 
 }
