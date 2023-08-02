@@ -3,27 +3,29 @@
 <mapper namespace="WeMatch.wematch.mapper.TodoMapper">
 
     <insert id="saveTodo">
-        insert into todo_test(todo_id, member_id, todoname, todo_schedule, if_done) values(#{todoId}, #{memberId}, #{todoName}, #{todo_schedule}, false)
+        insert into todo(member_id, todoname, todo_schedule, if_done) values(#{memberId}, #{todoName}, #{todo_schedule}, false)
     </insert>
 
     <delete id="deleteTodo">
-        delete from todo_test where todo_id=#{todoId}
+        delete from todo where todo_id=#{todoId}
     </delete>
 
     <update id="checkTodo">
-        update todo_test set if_done = !#{if_done} where todo_id=#{todoId}
+        update todo set if_done = !#{if_done} where todo_id=#{todoId}
     </update>
 
     <update id="updateTodo">
-        update todo_test set todoname=#{todoName} where todo_id=#{todoId}
+        update todo set todoname=#{todoName} where todo_id=#{todoId}
     </update>
 
     <select id="findTodoById" resultType="WeMatch.wematch.domain.todo.dto.TodoResponseDto">
-        select * from todo_test where todo_id=#{todoId}
+        select * from todo where todo_id=#{todoId}
     </select>
 
     <select id="findTodoByIdDate" resultType="WeMatch.wematch.domain.todo.dto.TodoResponseDto">
-        select * from todo_test where todo_schedule=#{todo_schedule} and member_id=#{memberId}
+        select t.todo_id as todoId, t.member_id as memberId, t.todoname as todoName, t.if_done as completed, t.todo_schedule as todo_schedule
+        from todo t where t.todo_schedule=#{todo_schedule} and t.member_id=#{memberId}
     </select>
+
 </mapper>
 

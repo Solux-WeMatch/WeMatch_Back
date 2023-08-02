@@ -1,5 +1,6 @@
 package WeMatch.wematch.mapper;
 
+import WeMatch.wematch.domain.todo.dto.TodoListRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoRequestDto;
 import WeMatch.wematch.domain.todo.dto.TodoResponseDto;
 import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
@@ -28,6 +29,6 @@ public interface TodoMapper {
     // Todo TodoId로 조회
     TodoResponseDto findTodoById(Long todoId);
 
-    List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate todo_schedule);
+    List<TodoResponseDto> findTodoByIdDate(TodoListRequestDto TodoListRequestDto);
 
 }
