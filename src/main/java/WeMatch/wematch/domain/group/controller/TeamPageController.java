@@ -59,10 +59,6 @@ public class TeamPageController {
         return success(SUCCESS_TO_GET_MINUTE,teamService.getMinute(id));
     }
 
-    @GetMapping("/count")
-    public Response countEvent(@RequestParam Long groupId, @RequestParam LocalDate date){
-        return success(SUCCESS_GET_EVENTS_COUNT, teamService.countEvent(groupId, date));
-    }
 
     @PostMapping("/exit")
     public Response exitTeam(@RequestParam Long groupId, @RequestParam Long memberId){
