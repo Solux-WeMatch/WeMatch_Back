@@ -29,6 +29,6 @@ public interface TodoMapper {
     // Todo TodoId로 조회
     TodoResponseDto findTodoById(Long todoId);
 
-    List<TodoResponseDto> findTodoByIdDate(TodoListRequestDto TodoListRequestDto);
+    List<TodoResponseDto> findTodoByIdDate(TodoListRequestDto todoListRequestDto);
 
 }

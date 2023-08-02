@@ -26,7 +26,7 @@ public class Response {
     }
 
     public static Response failure(String message) {
-        return new Response(false, 400,message,null);
+        return new Response(400, false,message,null);
     }
 
     public static Response failure(HttpStatus status,String message) {
