@@ -3,6 +3,7 @@ package WeMatch.wematch.domain.member.controller;
 
 import WeMatch.wematch.domain.group.dto.GetTeamResponseDto;
 import WeMatch.wematch.domain.group.service.TeamService;
+import WeMatch.wematch.domain.mail.service.MailService;
 import WeMatch.wematch.domain.member.dto.TeamCreateRequestDto;
 import WeMatch.wematch.domain.member.dto.TeamSaveRequestDto;
 import WeMatch.wematch.domain.member.dto.TeamListResponseDto;
@@ -25,6 +26,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final TeamService teamService;
+    private final MailService mailService;
 
     @GetMapping("/teamlist")
     public Response getTeamList(@RequestParam Long memberId){
@@ -42,7 +44,7 @@ public class MemberController {
     @PostMapping("/invite")
     public Response inviteTeam(@RequestBody TeamSaveRequestDto teamSaveRequestDto){
         // 팀 생성 이메일 보내기
-
+        mailService.sendTeamInviteMail(teamSaveRequestDto);
 
         return success(SUCCESS_TEAM_INVITE);
     }
