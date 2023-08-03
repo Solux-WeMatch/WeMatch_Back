@@ -128,20 +128,24 @@
         WHERE tm.member_id = #{memberId};
     </select>
 
+    <select id="getTeamId" resultType="Long">
+        select team_id from Team where teamname=#{teamName}
+    </select>
+
     <insert id="createTeam">
-        insert into Team(team_id, teamname) values(#{teamId}, #{teamName})
+        insert into Team(teamname) values(#{teamName})
     </insert>
 
     <insert id="saveTeam">
-        insert into Team_Member(team_id, member_id) values(#{groupId}, #{memberId})
+        insert into Team_Member(team_id, member_id) values(#{arg0}, #{arg1})
     </insert>
 
     <delete id="exitTeam">
-        delete from Team_Member where team_id=#{groupId} and member_id=#{memberId}
+        delete from Team_Member where team_id=#{arg0} and member_id=#{arg1}
     </delete>
 
     <delete id="deleteTeam">
-        delete from Team where team_id=#{groupId} CASCADE
+        delete from Team where team_id=#{groupId}
     </delete>
 
 </mapper>

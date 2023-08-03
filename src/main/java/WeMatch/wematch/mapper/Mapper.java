@@ -7,7 +7,6 @@ import WeMatch.wematch.domain.member.dto.TeamListResponseDto;
 
 import WeMatch.wematch.domain.member.entity.Member;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @org.apache.ibatis.annotations.Mapper
@@ -48,9 +47,9 @@ public interface Mapper {
     void deleteCandidates(Long groupId);
     void insertCandidates(Long groupId, List<TeamEventsResponseDto> results);
 
-
+    Long getTeamId(String teamName);
     void createTeam(TeamCreateRequestDto teamCreateRequestDto);
-    void saveTeam(Long groupId, Long memberId);
+    void saveTeam(Long teamId, Long memberId);
     void exitTeam(Long groupId, Long memberId);
     void deleteTeam(Long groupId);
 
