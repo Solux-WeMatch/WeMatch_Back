@@ -21,7 +21,7 @@ public class MailService {
         message.setTo(teamSaveRequestDto.getEmail()); // 받는 이메일
         message.setText("팀 생성을 수락하시겠습니까?\n" +
                 "수락하시려면 아래 링크를 클릭하세요.\n" +
-                "http://example.com/acceptTeam?teamId=" + teamSaveRequestDto.getTeamId());
+                "http://localhost:8000/acceptTeam?teamId=" + teamSaveRequestDto.getTeamId() + "&memberId=" + teamSaveRequestDto.getMemberId());
 
         javaMailSender.send(message);
     }
