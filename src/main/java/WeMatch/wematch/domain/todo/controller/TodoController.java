@@ -8,6 +8,7 @@ import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
 import WeMatch.wematch.domain.todo.service.TodoService;
 import WeMatch.wematch.response.Response;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -52,8 +53,14 @@ public class TodoController {
 
     // memberId가 id인 사용자의 date 날짜의 todo 조회
     @GetMapping
-    public Response findByIdDate(@RequestBody TodoListRequestDto TodoListRequestDto){
-        List<TodoResponseDto> result = todoService.findTodoByIdDate(TodoListRequestDto); // memberService의 memberId로 수정
+    public Response findByIdDate(@RequestParam Long memberId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate date){
+        List<TodoResponseDto> result = todoService.findTodoByIdDate(memberId, date); // memberService의 memberId로 수정
+        return Response.success(SUCCESS, result);
+    }
+
+    @GetMapping("/month")
+    public Response findMonthTodo(@RequestParam Long memberId,@RequestParam int year, @RequestParam int month){
+        List<TodoResponseDto> result = todoService.findMonthTodo(memberId, year, month); // memberService의 memberId로 수정
         return Response.success(SUCCESS, result);
     }
 }
