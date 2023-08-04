@@ -3,6 +3,7 @@ package WeMatch.wematch.domain.member.controller;
 
 import WeMatch.wematch.domain.group.dto.GetTeamResponseDto;
 import WeMatch.wematch.domain.group.service.TeamService;
+import WeMatch.wematch.domain.mail.service.MailService;
 import WeMatch.wematch.domain.member.dto.TeamCreateRequestDto;
 import WeMatch.wematch.domain.member.dto.TeamSaveRequestDto;
 import WeMatch.wematch.domain.member.dto.TeamListResponseDto;
@@ -25,6 +26,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final TeamService teamService;
+    private final MailService mailService;
 
     @GetMapping("/teamlist")
     public Response getTeamList(@RequestParam Long memberId){
@@ -35,15 +37,16 @@ public class MemberController {
     @PostMapping("/create-team")
     public Response createTeam(@RequestBody TeamCreateRequestDto teamCreateRequestDto){
         teamService.createTeam(teamCreateRequestDto);
-        teamService.saveTeam(teamCreateRequestDto.getTeamId(), teamCreateRequestDto.getMemberId());
-        return success(SUCCESS_TEAM_CREATE, teamCreateRequestDto);
+        Long teamId = teamService.getTeamId(teamCreateRequestDto.getTeamName());
+        Long memberId = teamCreateRequestDto.getMemberId();
+        teamService.saveTeam(teamId, memberId);
+        return success(SUCCESS_TEAM_CREATE);
     }
 
     @PostMapping("/invite")
     public Response inviteTeam(@RequestBody TeamSaveRequestDto teamSaveRequestDto){
         // 팀 생성 이메일 보내기
-
-
+        mailService.sendTeamInviteMail(teamSaveRequestDto);
         return success(SUCCESS_TEAM_INVITE);
     }
 
@@ -54,6 +57,7 @@ public class MemberController {
         if (team != null) {
             // 팀 멤버로 추가
             teamService.saveTeam(teamId, memberId);
+            System.out.println("팀 멤버 초대 수락");
             return success(SUCCESS_TEAM_SAVE);
         } else {
             // 팀이 존재하지 않는 경우 등 예외 처리

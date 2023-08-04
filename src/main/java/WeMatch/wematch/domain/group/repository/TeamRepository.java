@@ -6,7 +6,6 @@ import WeMatch.wematch.mapper.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -59,13 +58,16 @@ public class TeamRepository {
     public void deleteCandidates(Long groupId) {teamDAO.deleteCandidates(groupId);}
     public void insertCandidates(Long groupId,List<TeamEventsResponseDto> results) {teamDAO.insertCandidates(groupId,results);}
 
+    public Long getTeamId(String teamName){
+        return teamDAO.getTeamId(teamName);
+    }
 
     public void createTeam(TeamCreateRequestDto teamCreateRequestDto){
         teamDAO.createTeam(teamCreateRequestDto);
     }
 
-    public void saveTeam(Long groupId, Long memberId){
-        teamDAO.saveTeam(groupId, memberId);
+    public void saveTeam(Long teamId, Long memberId){
+        teamDAO.saveTeam(teamId, memberId);
     }
 
     public void exitTeam(Long groupId, Long memberId){

@@ -11,7 +11,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -215,6 +214,10 @@ public class TeamService {
             }
         }
         return results;
+    }
+
+    public Long getTeamId(String teamName){
+        return teamRepository.getTeamId(teamName);
     }
 
     // team 새로 생성
