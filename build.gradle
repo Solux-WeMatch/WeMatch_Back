@@ -40,7 +40,7 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.17'
 	//MyBatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
-	runtimeOnly 'mysql:mysql-connector-java:8.0.25'
+	runtimeOnly 'mysql:mysql-connector-java'
 
 	//mail sender
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
