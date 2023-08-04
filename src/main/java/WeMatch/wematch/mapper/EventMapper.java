@@ -1,9 +1,11 @@
 package WeMatch.wematch.mapper;
 
+import WeMatch.wematch.domain.event.dto.EventListRequestDto;
 import WeMatch.wematch.domain.event.dto.EventRequestDto;
 import WeMatch.wematch.domain.event.dto.EventResponseDto;
 import WeMatch.wematch.domain.event.dto.EventSaveRequestDto;
 import WeMatch.wematch.domain.event.entity.Event;
+import WeMatch.wematch.domain.group.dto.TeamEventsResponseDto;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +25,7 @@ public interface EventMapper {
     Event findEventById(Long eventId);
 
     // date 날짜의 event 조회
-    List<EventResponseDto> findEventByDay(@Param("memberId") Long memberId, @Param("date") LocalDate date);
+    List<EventResponseDto> findEventByDay(Long memberId, LocalDate date);
 
     // date 날짜가 속한 week의 event 조회
     List<EventResponseDto> findEventByWeek(Long memberId, LocalDateTime date);

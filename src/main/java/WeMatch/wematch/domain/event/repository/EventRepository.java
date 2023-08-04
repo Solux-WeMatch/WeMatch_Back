@@ -1,9 +1,11 @@
 package WeMatch.wematch.domain.event.repository;
 
+import WeMatch.wematch.domain.event.dto.EventListRequestDto;
 import WeMatch.wematch.domain.event.dto.EventRequestDto;
 import WeMatch.wematch.domain.event.dto.EventResponseDto;
 import WeMatch.wematch.domain.event.dto.EventSaveRequestDto;
 import WeMatch.wematch.domain.event.entity.Event;
+import WeMatch.wematch.domain.group.dto.TeamEventsResponseDto;
 import WeMatch.wematch.mapper.EventMapper;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.annotations.Param;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -37,7 +40,7 @@ public class EventRepository {
     }
 
     // 날짜별 event 조회
-    public List<EventResponseDto> findEventByDay(@Param("memberId") Long memberId, @Param("date") LocalDate date){
+    public List<EventResponseDto> findEventByDay(Long memberId, LocalDate date){
         List<EventResponseDto> event = eventDAO.findEventByDay(memberId, date);
         return event;
     }
