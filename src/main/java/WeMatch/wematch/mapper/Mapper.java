@@ -38,7 +38,7 @@ public interface Mapper {
     MinuteTimeResponseDto getMinute(Long groupId);
 
     void insertFixedTime(Long memberId,String teamName, InsertFixedTimeRequestDto insertFixedTimeRequestDto);
-    CandidateResponseDto getFixedDate(Long candidateId);
+    GetCandidateFixDto getFixedDate(Long candidateId);
     List<Long> getTeamMembersByCandidate(Long candidateId);
     String getTeamNameByCandidateId(Long candidateId);
 
@@ -53,4 +53,6 @@ public interface Mapper {
     void exitTeam(Long groupId, Long memberId);
     void deleteTeam(Long groupId);
 
+    void changePassword(String randomPassword,String email);
+    List<Long> getCandidateIds(Long groupId);
 }

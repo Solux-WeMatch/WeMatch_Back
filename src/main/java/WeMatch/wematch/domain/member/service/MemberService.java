@@ -16,10 +16,22 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class MemberService {
-    public static MemberRepository memberRepository;
+    public final MemberRepository memberRepository;
 
     public Member getCurrentMember() {
-        return memberRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(SecurityContextHolder.getContext()==null) {
+            System.out.println("null!!!!");
+        } else if(SecurityContextHolder.getContext().getAuthentication()==null) {
+            System.out.println(SecurityContextHolder.getContext() +" 1234 success");
+            System.out.println("a is null!!");
+        } else if(SecurityContextHolder.getContext().getAuthentication().getName()==null) {
+            System.out.println("name is null");
+        } else {
+            System.out.println(SecurityContextHolder.getContext().getAuthentication().getName()+" name sucess");
+            System.out.println(email);
+        }
+        return memberRepository.findByEmail(email);
     }
 
     public List<TeamListResponseDto> getTeamList(Long memberId){

@@ -45,7 +45,7 @@ public class TeamRepository {
         return teamDAO.getTeamMembersByCandidate(candidateId);
     }
     public String getTeamNameByCandidateId(Long candidateId) {return teamDAO.getTeamNameByCandidateId(candidateId);}
-    public CandidateResponseDto getFixedDate(Long candidateId) {return teamDAO.getFixedDate(candidateId);}
+    public GetCandidateFixDto getFixedDate(Long candidateId) {return teamDAO.getFixedDate(candidateId);}
     public void insertFixedTime(List<Long> members,String teamName,InsertFixedTimeRequestDto insertFixedTimeRequestDto) {
         for(Long memberId:members) {
             teamDAO.insertFixedTime(memberId, teamName,insertFixedTimeRequestDto);
@@ -56,7 +56,9 @@ public class TeamRepository {
     public InsertFixedTimeRequestDto getCandidate(Long candidateId) {return teamDAO.getCandidate(candidateId);}
 
     public void deleteCandidates(Long groupId) {teamDAO.deleteCandidates(groupId);}
-    public void insertCandidates(Long groupId,List<TeamEventsResponseDto> results) {teamDAO.insertCandidates(groupId,results);}
+    public List<Long> insertCandidates(Long groupId,List<TeamEventsResponseDto> results) {
+        teamDAO.insertCandidates(groupId,results);
+        return teamDAO.getCandidateIds(groupId);}
 
     public Long getTeamId(String teamName){
         return teamDAO.getTeamId(teamName);

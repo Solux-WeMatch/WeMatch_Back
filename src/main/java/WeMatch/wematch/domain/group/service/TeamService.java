@@ -65,9 +65,9 @@ public class TeamService {
         teamRepository.insertFixedTime(members, teamName, insertFixedTimeRequestDto);
     }
 
-    public CandidateResponseDto getCandidate(Long candidateId) {
+    public GetCandidateFixDto getCandidate(Long candidateId) {
         InsertFixedTimeRequestDto candidate = teamRepository.getCandidate(candidateId);
-        return CandidateResponseDto.builder()
+        return GetCandidateFixDto.builder()
                 .startDate(candidate.getStartAt().toLocalDate())
                 .startAt(candidate.getStartAt().toLocalTime())
                 .endAt(candidate.getEndAt().toLocalTime())
@@ -88,8 +88,18 @@ public class TeamService {
         results = deleteSleepTime(results, groupId);
         results = deleteMinuteTime(results,teamRepository.getMinute(groupId).getMinute());
         //insertCandidates
-        teamRepository.insertCandidates(groupId,results);
+        List<Long> candidateIds = teamRepository.insertCandidates(groupId,results);
+        addCandidateIds(results, candidateIds);
         return results;
+    }
+
+    private void addCandidateIds(List<TeamEventsResponseDto> results, List<Long> candidateIds) {
+        Iterator<TeamEventsResponseDto> iterator = results.iterator();
+        int i=0;
+        while (iterator.hasNext()) {
+            TeamEventsResponseDto item = iterator.next();
+            item.setCandidateId(candidateIds.get(i++));
+        }
     }
 
     public List<TeamEventsResponseDto> getBlankTime(List<TeamEventsResponseDto> events) {

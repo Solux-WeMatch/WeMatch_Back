@@ -15,7 +15,7 @@
     </insert>
 
     <select id="findByEmail" resultType="WeMatch.wematch.domain.member.entity.Member">
-        select * from Member where email=#{email}
+        select member_id as id, email, password, name, role from Member where email=#{email}
     </select>
 
     <select id="getEvent" resultType="WeMatch.wematch.domain.group.dto.TeamEventsResponseDto">
@@ -88,7 +88,7 @@
         where c.candidate_id=#{candidateId}
     </select>
 
-    <select id="getFixedDate" resultType="WeMatch.wematch.domain.group.dto.CandidateResponseDto">
+    <select id="getFixedDate" resultType="WeMatch.wematch.domain.group.dto.GetCandidateFixDto">
         select start_schedule as startDate, end_schedule as endDate
         from candidate
         where candidate_id=#{candidateId}
@@ -148,4 +148,15 @@
         delete from Team where team_id=#{groupId}
     </delete>
 
+    <update id="changePassword">
+        update member
+        set password=#{randomPassword}
+        where email=#{email}
+    </update>
+
+    <select id="getCandidateIds" resultType="Long">
+        select candidate_id
+        from candidate
+        where team_id=#{groupId}
+    </select>
 </mapper>
