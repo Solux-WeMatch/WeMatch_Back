@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class MemberService {
-    public static MemberRepository memberRepository;
+    public final MemberRepository memberRepository;
 
     public Member getCurrentMember() {
         return memberRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
