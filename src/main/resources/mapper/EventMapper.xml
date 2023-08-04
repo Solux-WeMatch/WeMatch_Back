@@ -16,12 +16,12 @@
 
 
     <select id="findEventById">
-        select * from event_test where event_id=#{eventID}
+        select * from event_test where event_id=#{eventId}
     </select>
 
     <select id="findEventByDay" resultType="WeMatch.wematch.domain.event.dto.EventResponseDto">
         select event_id as eventId, member_id as memberId, eventname as eventName, start_schedule, end_schedule
-        from event where member_id='${arg0}' and DATE(start_schedule)='${arg1}'
+        from event where member_id='${memberId}' and DATE(start_schedule)='${date}'
     </select>
 
     <select id="findEventByWeek">
@@ -29,7 +29,7 @@
     </select>
 
     <select id="findEventByMonth">
-        select * from event_test where member_id=#{memberId} and DATE_FORMAT(start_schedule,'%m')=#{date.getMonthValue()}
+        select * from event where member_id=#{memberId} and DATE_FORMAT(start_schedule,'%m')=#{date.getMonthValue()}
     </select>
 
 </mapper>
