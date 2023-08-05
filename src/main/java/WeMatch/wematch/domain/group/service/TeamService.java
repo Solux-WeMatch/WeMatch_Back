@@ -74,11 +74,16 @@ public class TeamService {
                 .build();
     }
 
-    public List<TeamEventsResponseDto> getCandidates(Long groupId) {
+    public List<CandidateResponseDto> getCandidates(Long groupId,int weekNumber, int year) {
+        List<CandidateResponseDto> returnDto = new ArrayList<>();
         List<TeamEventsResponseDto> results = teamRepository.getEvent(groupId);
+        // weekNumber, year로 제한
+        results = getResult(results,weekNumber,year);
         // no results -> return
-        if(results.isEmpty()) {return results;}
+        if(results.isEmpty()) {toResponseDto(returnDto, results);}
+
         List<TeamEventsResponseDto> results2 = teamRepository.getEvent(groupId);
+        results2 = getResult(results2,weekNumber,year);
         //startAt으로 정렬
         Collections.sort(results2, Comparator.comparing(TeamEventsResponseDto::getEventStartAt));
 
@@ -96,7 +101,20 @@ public class TeamService {
         //insertCandidates
         List<Long> candidateIds = teamRepository.insertCandidates(groupId,results);
         addCandidateIds(results, candidateIds);
-        return results;
+        return toResponseDto(returnDto, results);
+    }
+
+    private List<CandidateResponseDto> toResponseDto(List<CandidateResponseDto> returnDto, List<TeamEventsResponseDto> results) {
+        for(TeamEventsResponseDto result : results) {
+            returnDto.add(
+                    CandidateResponseDto.builder()
+                            .start(result.getEventStartAt())
+                            .end(result.getEventEndAt())
+                            .title(result.getCandidateId())
+                            .build()
+            );
+        }
+        return returnDto;
     }
 
 
