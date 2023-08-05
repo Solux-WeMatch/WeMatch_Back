@@ -76,6 +76,8 @@ public class TeamService {
 
     public List<TeamEventsResponseDto> getCandidates(Long groupId) {
         List<TeamEventsResponseDto> results = teamRepository.getEvent(groupId);
+        // no results -> return
+        if(results.isEmpty()) {return results;}
         List<TeamEventsResponseDto> results2 = teamRepository.getEvent(groupId);
         //startAt으로 정렬
         Collections.sort(results2, Comparator.comparing(TeamEventsResponseDto::getEventStartAt));
@@ -85,13 +87,18 @@ public class TeamService {
         //getCandidates
         results = getBlankTime(results);
         results = setFirstLast(results, results2, groupId);
+        //수면시간 제거
         results = deleteSleepTime(results, groupId);
+        // 재정렬
+        Collections.sort(results, Comparator.comparing(TeamEventsResponseDto::getEventStartAt));
+        // 분단위 시간 제거
         results = deleteMinuteTime(results,teamRepository.getMinute(groupId).getMinute());
         //insertCandidates
         List<Long> candidateIds = teamRepository.insertCandidates(groupId,results);
         addCandidateIds(results, candidateIds);
         return results;
     }
+
 
     private void addCandidateIds(List<TeamEventsResponseDto> results, List<Long> candidateIds) {
         Iterator<TeamEventsResponseDto> iterator = results.iterator();
@@ -144,7 +151,7 @@ public class TeamService {
 
     public List<TeamEventsResponseDto> deleteSleepTime(List<TeamEventsResponseDto> results, Long groupId) {
         SleepTimeDto sleepTime = getSleep(groupId);
-        LocalTime startSleep = sleepTime.getStartAt();LocalTime endSleep = sleepTime.getEndAt();
+        LocalTime startSleep = sleepTime.getStartAt(); LocalTime endSleep = sleepTime.getEndAt();
         //각 날짜별로 가장 이른 후보시간의 index 불러옴
         List<Integer> earliestTimes = getEarliestTimes(results);
         //각 날짜별로 가장 늦은 후보시간의 index 불러옴
@@ -160,9 +167,20 @@ public class TeamService {
                 }
             }
         }
-
         // OR 후보시간의 endAt.isAfter sleepTime의 startAt
-        for (int i = 0; i < results.size(); i++) {
+        int size = results.size();
+        for (int i = 0; i < size; i++) {
+            if(lastTimes.contains(i)) {
+                TeamEventsResponseDto dto = TeamEventsResponseDto.builder()
+                        .eventStartAt(LocalDateTime.of(results.get(i+1).getEventStartAt().toLocalDate(),endSleep))
+                        .eventEndAt(LocalDateTime.of(results.get(i+1).getEventStartAt().toLocalDate(),results.get(i).getEventEndAt().toLocalTime()))
+                        .build();
+                results.add(dto);
+            }
+        }
+        lastTimes = getLastTimes(results);
+        size = results.size();
+        for (int i = 0; i < size; i++) {
             if(lastTimes.contains(i)) {
                 if (results.get(i).getEventEndAt().toLocalTime().isAfter(startSleep)) {
                     //-> 후보시간.endAt = sleepTime.startAt
