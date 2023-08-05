@@ -29,8 +29,8 @@ public class TeamService {
         Iterator<TeamEventsResponseDto> iterator = events.iterator();
         while (iterator.hasNext()) {
             TeamEventsResponseDto event = iterator.next();
-            if (event.getEventStartAt().toLocalDate().get(WeekFields.ISO.weekOfYear()) != weekNumber
-                    || event.getEventStartAt().getYear() != year) {
+            if (event.getStart().toLocalDate().get(WeekFields.ISO.weekOfYear()) != weekNumber
+                    || event.getStart().getYear() != year) {
                 iterator.remove();
             }
         }
@@ -74,18 +74,18 @@ public class TeamService {
                 .build();
     }
 
-    public List<CandidateResponseDto> getCandidates(Long groupId,int weekNumber, int year) {
+    public List<TeamEventsResponseDto> getCandidates(Long groupId,int weekNumber, int year) {
         List<CandidateResponseDto> returnDto = new ArrayList<>();
         List<TeamEventsResponseDto> results = teamRepository.getEvent(groupId);
         // weekNumber, year로 제한
         results = getResult(results,weekNumber,year);
         // no results -> return
-        if(results.isEmpty()) {toResponseDto(returnDto, results);}
+        if(results.isEmpty()) {return results;}
 
         List<TeamEventsResponseDto> results2 = teamRepository.getEvent(groupId);
         results2 = getResult(results2,weekNumber,year);
         //startAt으로 정렬
-        Collections.sort(results2, Comparator.comparing(TeamEventsResponseDto::getEventStartAt));
+        Collections.sort(results2, Comparator.comparing(TeamEventsResponseDto::getStart));
 
         //delete
         teamRepository.deleteCandidates(groupId);
@@ -95,26 +95,13 @@ public class TeamService {
         //수면시간 제거
         results = deleteSleepTime(results, groupId);
         // 재정렬
-        Collections.sort(results, Comparator.comparing(TeamEventsResponseDto::getEventStartAt));
+        Collections.sort(results, Comparator.comparing(TeamEventsResponseDto::getStart));
         // 분단위 시간 제거
         results = deleteMinuteTime(results,teamRepository.getMinute(groupId).getMinute());
         //insertCandidates
         List<Long> candidateIds = teamRepository.insertCandidates(groupId,results);
         addCandidateIds(results, candidateIds);
-        return toResponseDto(returnDto, results);
-    }
-
-    private List<CandidateResponseDto> toResponseDto(List<CandidateResponseDto> returnDto, List<TeamEventsResponseDto> results) {
-        for(TeamEventsResponseDto result : results) {
-            returnDto.add(
-                    CandidateResponseDto.builder()
-                            .start(result.getEventStartAt())
-                            .end(result.getEventEndAt())
-                            .title(result.getCandidateId())
-                            .build()
-            );
-        }
-        return returnDto;
+        return results;
     }
 
 
@@ -123,7 +110,7 @@ public class TeamService {
         int i=0;
         while (iterator.hasNext()) {
             TeamEventsResponseDto item = iterator.next();
-            item.setCandidateId(candidateIds.get(i++));
+            item.setTitle(candidateIds.get(i++));
         }
     }
 
@@ -135,26 +122,26 @@ public class TeamService {
             // 모든 시간대가 없는 경우
             missingTimeIntervals.add(
                     TeamEventsResponseDto.builder()
-                            .eventStartAt(LocalDateTime.MIN)
-                            .eventEndAt(LocalDateTime.MAX)
+                            .start(LocalDateTime.MIN)
+                            .end(LocalDateTime.MAX)
                             .build());
             return missingTimeIntervals;
         }
 
-        events.sort((event1, event2) -> event1.getEventStartAt().compareTo(event2.getEventStartAt()));
+        events.sort((event1, event2) -> event1.getStart().compareTo(event2.getStart()));
 
-        LocalDateTime startTime = events.get(0).getEventStartAt();
-        LocalDateTime endTime = events.get(0).getEventEndAt();
+        LocalDateTime startTime = events.get(0).getStart();
+        LocalDateTime endTime = events.get(0).getEnd();
 
         for (int i = 1; i < events.size(); i++) {
-            LocalDateTime nextStartTime = events.get(i).getEventStartAt();
-            LocalDateTime nextEndTime = events.get(i).getEventEndAt();
+            LocalDateTime nextStartTime = events.get(i).getStart();
+            LocalDateTime nextEndTime = events.get(i).getEnd();
 
             if (endTime.isBefore(nextStartTime)) {
                 // 이벤트 간의 빈 구간이 존재
                 missingTimeIntervals.add(TeamEventsResponseDto.builder()
-                        .eventStartAt(endTime)
-                        .eventEndAt(nextStartTime)
+                        .start(endTime)
+                        .end(nextStartTime)
                         .build());
             }
 
@@ -179,9 +166,9 @@ public class TeamService {
         //그 후보시간의 startAt.isBefore sleepTime의 endAt
         for (int i = 0; i < results.size(); i++) {
             if(earliestTimes.contains(i)) {
-                if (results.get(i).getEventStartAt().toLocalTime().isBefore(endSleep)) {
+                if (results.get(i).getStart().toLocalTime().isBefore(endSleep)) {
                     //-> 후보시간.startAt = sleepTime.endAt
-                    results.get(i).setEventStartAt(LocalDateTime.of(results.get(i).getEventStartAt().toLocalDate(), endSleep));
+                    results.get(i).setStart(LocalDateTime.of(results.get(i).getStart().toLocalDate(), endSleep));
                 }
             }
         }
@@ -190,8 +177,8 @@ public class TeamService {
         for (int i = 0; i < size; i++) {
             if(lastTimes.contains(i)) {
                 TeamEventsResponseDto dto = TeamEventsResponseDto.builder()
-                        .eventStartAt(LocalDateTime.of(results.get(i+1).getEventStartAt().toLocalDate(),endSleep))
-                        .eventEndAt(LocalDateTime.of(results.get(i+1).getEventStartAt().toLocalDate(),results.get(i).getEventEndAt().toLocalTime()))
+                        .start(LocalDateTime.of(results.get(i+1).getStart().toLocalDate(),endSleep))
+                        .end(LocalDateTime.of(results.get(i+1).getStart().toLocalDate(),results.get(i).getEnd().toLocalTime()))
                         .build();
                 results.add(dto);
             }
@@ -200,9 +187,9 @@ public class TeamService {
         size = results.size();
         for (int i = 0; i < size; i++) {
             if(lastTimes.contains(i)) {
-                if (results.get(i).getEventEndAt().toLocalTime().isAfter(startSleep)) {
+                if (results.get(i).getEnd().toLocalTime().isAfter(startSleep)) {
                     //-> 후보시간.endAt = sleepTime.startAt
-                    results.get(i).setEventEndAt(LocalDateTime.of(results.get(i).getEventEndAt().toLocalDate(), startSleep));
+                    results.get(i).setEnd(LocalDateTime.of(results.get(i).getEnd().toLocalDate(), startSleep));
                 }
             }
         }
@@ -211,8 +198,8 @@ public class TeamService {
 
     private List<Integer> getLastTimes(List<TeamEventsResponseDto> results) {
         List<Integer> lastTimes = results.stream()
-                .collect(Collectors.groupingBy(dto -> dto.getEventStartAt().toLocalDate(),
-                        Collectors.maxBy(Comparator.comparing(TeamEventsResponseDto::getEventEndAt))))
+                .collect(Collectors.groupingBy(dto -> dto.getStart().toLocalDate(),
+                        Collectors.maxBy(Comparator.comparing(TeamEventsResponseDto::getEnd))))
                 .values()
                 .stream()
                 .map(opt -> opt.orElse(null))
@@ -223,8 +210,8 @@ public class TeamService {
 
     private List<Integer> getEarliestTimes(List<TeamEventsResponseDto> results) {
         List<Integer> earliestTimes = results.stream()
-                .collect(Collectors.groupingBy(dto -> dto.getEventStartAt().toLocalDate(),
-                        Collectors.minBy(Comparator.comparing(TeamEventsResponseDto::getEventStartAt))))
+                .collect(Collectors.groupingBy(dto -> dto.getStart().toLocalDate(),
+                        Collectors.minBy(Comparator.comparing(TeamEventsResponseDto::getStart))))
                 .values()
                 .stream()
                 .map(opt -> opt.orElse(null))
@@ -235,15 +222,15 @@ public class TeamService {
 
     public List<TeamEventsResponseDto> setFirstLast (List < TeamEventsResponseDto > results, List < TeamEventsResponseDto > events, Long groupId){
         TeamEventsResponseDto dtoSetFirst = TeamEventsResponseDto.builder()
-                .eventStartAt(LocalDateTime.of(events.get(0).getEventStartAt().toLocalDate(), LocalTime.of(0, 0)))
-                .eventEndAt(events.get(0).getEventStartAt())
+                .start(LocalDateTime.of(events.get(0).getStart().toLocalDate(), LocalTime.of(0, 0)))
+                .end(events.get(0).getStart())
                 .build();
         results.add(0, dtoSetFirst);
 
         int lastIdx = events.size() - 1;
         TeamEventsResponseDto dtoSetLast = TeamEventsResponseDto.builder()
-                .eventStartAt(events.get(lastIdx).getEventEndAt())
-                .eventEndAt(LocalDateTime.of(events.get(lastIdx).getEventStartAt().toLocalDate().plusDays(1), LocalTime.of(0, 0)))
+                .start(events.get(lastIdx).getEnd())
+                .end(LocalDateTime.of(events.get(lastIdx).getStart().toLocalDate().plusDays(1), LocalTime.of(0, 0)))
                 .build();
         results.add(dtoSetLast);
         return results;
@@ -254,7 +241,7 @@ public class TeamService {
         Iterator<TeamEventsResponseDto> iterator = results.iterator();
         while (iterator.hasNext()) {
             TeamEventsResponseDto item = iterator.next();
-            Duration duration = Duration.between(item.getEventStartAt(), item.getEventEndAt());
+            Duration duration = Duration.between(item.getStart(), item.getEnd());
             if (minute>duration.toMinutes()) {
                 iterator.remove(); // 요소 삭제
             }

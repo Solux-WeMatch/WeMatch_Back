@@ -21,10 +21,9 @@
     <select id="getEvent" resultType="WeMatch.wematch.domain.group.dto.TeamEventsResponseDto">
 
         SELECT
-        e.member_id AS memberId,
-        e.event_id AS eventId,
-        e.start_schedule AS eventStartAt,
-        e.end_schedule AS eventEndAt
+        e.event_id AS title,
+        e.start_schedule AS start,
+        e.end_schedule AS end
         FROM event e
         JOIN team_member tm ON tm.member_id = e.member_id
         WHERE tm.team_id = #{teamId}
@@ -115,7 +114,7 @@
         insert into candidate(team_id,start_schedule,end_schedule)
         values
         <foreach collection="results" item="results" index="index" separator=",">
-            (#{groupId},#{results.eventStartAt},#{results.eventEndAt})
+            (#{groupId},#{results.start},#{results.end})
         </foreach>
     </insert>
 
