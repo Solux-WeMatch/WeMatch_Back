@@ -51,17 +51,17 @@ public class MemberController {
     }
 
     @GetMapping("/acceptTeam")
-    public Response acceptTeam(@RequestParam Long teamId, @RequestParam Long memberId){
+    public String acceptTeam(@RequestParam Long teamId, @RequestParam Long memberId){
         // 팀 정보를 가져와서 수락 여부 처리
         GetTeamResponseDto team = teamService.getTeamInfo(teamId);
         if (team != null) {
             // 팀 멤버로 추가
             teamService.saveTeam(teamId, memberId);
             System.out.println("팀 멤버 초대 수락");
-            return success(SUCCESS_TEAM_SAVE);
+            return "성공적으로 모임에 초대되었습니다!";
         } else {
             // 팀이 존재하지 않는 경우 등 예외 처리
-            return failure(FAILURE_GET_TEAM_INFO);
+            return "존재하지 않는 모임입니다.";
         }
     }
 
