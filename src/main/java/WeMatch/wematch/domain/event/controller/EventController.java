@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,13 +51,9 @@ public class EventController {
 
     // memberId가 id인 사용자의 date 날짜의 event 조회
     @GetMapping("/day")
-    public ResponseEntity<List<EventResponseDto>> findEventByDay(@RequestBody EventListRequestDto eventListRequestDto){
-        List<EventResponseDto> result = eventService.findEventByDay(eventListRequestDto.getMemberId(), eventListRequestDto.getDate()); // memberService 이용 코드 수정
-        if (!result.isEmpty()) {
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public Response findEventByDay(@RequestParam Long memberId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate date){
+        List<EventResponseDto> result = eventService.findEventByDay(memberId, date); // memberService 이용 코드 수정
+        return Response.success(SUCCESS, result);
     }
 
     @GetMapping("/week")

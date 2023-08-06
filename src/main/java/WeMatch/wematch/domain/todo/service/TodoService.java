@@ -41,7 +41,11 @@ public class TodoService {
         return entity;
     }
 
-    public List<TodoResponseDto> findTodoByIdDate(TodoListRequestDto TodoListRequestDto) {
-        return todoRepository.findTodoByIdDate(TodoListRequestDto);
+    public List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate date) {
+        return todoRepository.findTodoByIdDate(memberId, date);
+    }
+
+    public List<TodoResponseDto> findMonthTodo(Long memberId, int year, int month) {
+        return todoRepository.findMonthTodo(memberId, year, month);
     }
 }

@@ -8,6 +8,7 @@ import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
 import WeMatch.wematch.domain.todo.entity.Todo;
 import WeMatch.wematch.mapper.TodoMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
@@ -36,8 +37,12 @@ public class TodoRepository {
         todoDAO.deleteTodo(todo);
     }
 
-    public List<TodoResponseDto> findTodoByIdDate(TodoListRequestDto TodoListRequestDto){
-        return todoDAO.findTodoByIdDate(TodoListRequestDto);
+    public List<TodoResponseDto> findTodoByIdDate(Long memberId, LocalDate date){
+        return todoDAO.findTodoByIdDate(memberId, date);
+    }
+
+    public List<TodoResponseDto> findMonthTodo(Long memberId,int year, int month){
+        return todoDAO.findMonthTodo(memberId, year, month);
     }
 
     public TodoResponseDto findTodoById(Long todoId){
