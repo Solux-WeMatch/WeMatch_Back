@@ -60,8 +60,10 @@ public class TeamPageController {
         return success(SUCCESS_TO_GET_MINUTE,teamService.getMinute(groupId));
     }
     @GetMapping("/candidate")
-    public Response getCandidates(@RequestParam Long groupId) {
-        return success(SUCCESS_TO_GET_CANDIDATES,teamService.getCandidates(groupId));
+    public Response getCandidates(@RequestParam Long groupId,
+                                  @RequestParam int weekNumber,
+                                  @RequestParam int year) {
+        return success(SUCCESS_TO_GET_CANDIDATES,teamService.getCandidates(groupId,weekNumber,year));
     }
 
 

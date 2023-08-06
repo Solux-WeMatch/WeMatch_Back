@@ -25,4 +25,13 @@ public class MailService {
 
         javaMailSender.send(message);
     }
+
+    public void sendChangePassword(String emailAddress,String randomPassword) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("WeMatch : 비밀번호가 변경되었습니다");
+        message.setTo(emailAddress);
+        message.setText("변경된 비밀번호를 확인하세요\n"+
+                randomPassword);
+        javaMailSender.send(message);
+    }
 }

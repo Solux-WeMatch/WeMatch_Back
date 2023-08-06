@@ -38,4 +38,5 @@ public class MemberRepository {
         return memberDAO.getTeamList(memberId);
     }
 
+    public void changePassword(String randomPassword,String email) {memberDAO.changePassword(randomPassword,email);}
 }

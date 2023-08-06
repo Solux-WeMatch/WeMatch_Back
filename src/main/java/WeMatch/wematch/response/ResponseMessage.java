@@ -33,7 +33,7 @@ public class ResponseMessage {
     public static final String SUCCESS_TO_INSERT_FIXED_TIME="일정 확정 성공";
     public static final String SUCCESS_TO_GET_CANDIDATE = "후보시간 정보 불러오기 성공";
     public static final String SUCCESS_TO_GET_CANDIDATES = "후보시간 정보 불러오기 성공";
-
+    public static final String SUCCESS_TO_FIND_PW = "비밀번호 찾기 성공";
 
 
     public static final String SUCCESS_TEAM_CREATE="Team 생성 성공";

@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CandidateResponseDto {
-    private Long title;
-
-    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mmZ")
-    private LocalDateTime start;
-
-    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mmZ")
-    private LocalDateTime end;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class GetCandidateTeamDto {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime eventStartAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime eventEndAt;
+    private Long candidateId;
 }
