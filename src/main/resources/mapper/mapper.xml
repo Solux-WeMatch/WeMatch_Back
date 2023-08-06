@@ -44,31 +44,31 @@
     </select>
     <select id="getTeamName" resultType="String">
         select teamname
-        from team
+        from Team
         where team_id=1
     </select>
 
     <select id="getSleep" resultType="WeMatch.wematch.domain.group.dto.SleepTimeDto">
         select start_sleep as startAt , end_sleep as endAt
-        from team
+        from Team
         where team_id=#{groupId}
     </select>
     <update id="updateSleep">
-        update team
+        update Team
         set start_sleep=#{sleepTimeDto.startAt},end_sleep=#{sleepTimeDto.endAt}
         where team_id=#{groupId}
     </update>
 
 
     <update id="insertMinute">
-        UPDATE team
+        UPDATE Team
         SET minute_schedule=#{minute}
         WHERE team_id=#{groupId};
     </update>
 
     <select id="getMinute" resultType="WeMatch.wematch.domain.group.dto.MinuteTimeResponseDto">
         select minute_schedule
-        from team
+        from Team
         where team_id=#{groupId}
     </select>
 
@@ -82,7 +82,7 @@
     <select id="getTeamNameByCandidateId" resultType="String">
         select t.teamname
         from candidate as c
-        join team as t
+        join Team as t
         on c.team_id=t.team_id
         where c.candidate_id=#{candidateId}
     </select>
