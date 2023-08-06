@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -29,9 +30,19 @@ public class TeamService {
         Iterator<TeamEventsResponseDto> iterator = events.iterator();
         while (iterator.hasNext()) {
             TeamEventsResponseDto event = iterator.next();
-            if (event.getStart().toLocalDate().get(WeekFields.ISO.weekOfYear()) != weekNumber
-                    || event.getStart().getYear() != year) {
+            // 연도로 거름
+            if (event.getStart().getYear() != year) { //연도
                 iterator.remove();
+            }
+            // weekNumber로 거름
+            if(event.getStart().toLocalDate().getDayOfWeek()== DayOfWeek.SUNDAY) {
+                if(event.getStart().toLocalDate().get(WeekFields.ISO.weekOfYear()) != (weekNumber-1)) {
+                    iterator.remove();
+                }
+            } else {
+                if(event.getStart().toLocalDate().get(WeekFields.ISO.weekOfYear()) != weekNumber) {
+                    iterator.remove();
+                }
             }
         }
         return events;
