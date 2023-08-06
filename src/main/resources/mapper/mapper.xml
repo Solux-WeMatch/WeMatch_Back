@@ -25,20 +25,20 @@
         e.start_schedule AS start,
         e.end_schedule AS end
         FROM event e
-        JOIN team_member tm ON tm.member_id = e.member_id
+        JOIN Team_Member tm ON tm.member_id = e.member_id
         WHERE tm.team_id = #{teamId}
 
     </select>
 
     <select id="getTeamMembers" resultType="String">
         select m.name
-        from team_member g
+        from Team_Member g
         join member m on m.member_id=g.member_id
         where team_id=#{groupId}
     </select>
     <select id="getTeamMembersId" resultType="String">
         select m.member_id
-        from team_member g
+        from Team_Member g
         join member m on m.id=g.member_id
         where team_id=#{groupId}
     </select>
@@ -75,7 +75,7 @@
     <select id="getTeamMembersByCandidate" resultType="Long">
         select t.member_id
         from candidate c
-        join team_member as t
+        join Team_Member as t
         on c.team_id=t.team_id
         where c.candidate_id=#{candidateId}
     </select>
