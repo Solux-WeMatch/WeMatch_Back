@@ -136,11 +136,11 @@
     </insert>
 
     <insert id="saveTeam">
-        insert into Team_Member(team_id, member_id) values(#{arg0}, #{arg1})
+        insert into Team_Member(team_id, member_id) values(#{teamId}, #{memberId})
     </insert>
 
     <delete id="exitTeam">
-        delete from Team_Member where team_id=#{arg0} and member_id=#{arg1}
+        delete from Team_Member where team_id=#{groupId} and member_id=#{memberId}
     </delete>
 
     <delete id="deleteTeam">
