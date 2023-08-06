@@ -33,13 +33,13 @@
     <select id="getTeamMembers" resultType="String">
         select m.name
         from Team_Member g
-        join member m on m.member_id=g.member_id
+        join Member m on m.member_id=g.member_id
         where team_id=#{groupId}
     </select>
     <select id="getTeamMembersId" resultType="String">
         select m.member_id
         from Team_Member g
-        join member m on m.id=g.member_id
+        join Member m on m.id=g.member_id
         where team_id=#{groupId}
     </select>
     <select id="getTeamName" resultType="String">
