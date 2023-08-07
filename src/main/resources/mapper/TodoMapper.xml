@@ -24,7 +24,12 @@
 
     <select id="findTodoByIdDate" resultType="WeMatch.wematch.domain.todo.dto.TodoResponseDto">
         select t.todo_id as todoId, t.member_id as memberId, t.todoname as todoName, t.if_done as completed, t.todo_schedule as todo_schedule
-        from todo t where t.todo_schedule=#{todo_schedule} and t.member_id=#{memberId}
+        from todo t where t.todo_schedule='${date}' and t.member_id='${memberId}'
+    </select>
+
+    <select id="findMonthTodo" resultType="WeMatch.wematch.domain.todo.dto.TodoResponseDto">
+        select t.todo_id as todoId, t.member_id as memberId, t.todoname as todoName, t.if_done as completed, t.todo_schedule as todo_schedule
+        from todo t where member_id='${memberId}' and YEAR(t.todo_schedule)=#{year} and MONTH(t.todo_schedule)=#{month}
     </select>
 
 </mapper>

@@ -1,18 +1,23 @@
 package WeMatch.wematch.domain.event.dto;
 
 import WeMatch.wematch.domain.event.entity.Event;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class EventResponseDto {
     private Long eventId;
     private Long memberId;
     private String eventName;
     private LocalDateTime start_schedule;
     private LocalDateTime end_schedule;
+
 
     @Builder
     public EventResponseDto(Event entity) {
