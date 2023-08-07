@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import static WeMatch.wematch.response.Response.success;
 import static WeMatch.wematch.response.ResponseMessage.*;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
