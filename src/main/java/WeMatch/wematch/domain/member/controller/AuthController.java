@@ -8,7 +8,13 @@ import WeMatch.wematch.domain.member.service.AuthService;
 import WeMatch.wematch.domain.member.service.MemberService;
 import WeMatch.wematch.response.Response;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import static WeMatch.wematch.response.Response.success;
 import static WeMatch.wematch.response.ResponseMessage.*;
@@ -46,4 +52,5 @@ public class AuthController {
         authService.findPassword(findPasswordRequestDto,member);
         return success(SUCCESS_TO_FIND_PW);
     }
+
 }

@@ -4,10 +4,13 @@ package WeMatch.wematch.config.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -16,6 +19,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -23,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -71,6 +78,21 @@ public class SecurityConfig {
                 .and()
                 // JWT 인증 필터 적용
                 .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .logout(logout -> logout.logoutUrl("/auth/logout")
+                        // 로그아웃 처리 URL (= form action url)
+                        //.logoutSuccessUrl("/login") // 로그아웃 성공 후 targetUrl,
+                        // logoutSuccessHandler 가 있다면 효과 없으므로 주석처리.
+                        .addLogoutHandler((request, response, authentication) -> {
+                            // 사실 굳이 내가 세션 무효화하지 않아도 됨.
+                            // LogoutFilter가 내부적으로 해줌.
+                            HttpSession session = request.getSession();
+                            if (session != null) {
+                                session.invalidate();
+                            }
+                        })  // 로그아웃 핸들러 추가
+                        .logoutSuccessHandler(logoutSuccessHandler())
+                        .deleteCookies("remember-me") // 로그아웃 후 삭제할 쿠키 지정)
+                )
                 // 에러 핸들링
                 .exceptionHandling()
                 .accessDeniedHandler(new AccessDeniedHandler() {
@@ -92,10 +114,35 @@ public class SecurityConfig {
                         response.setContentType("text/html; charset=UTF-8");
                         response.getWriter().write("인증되지 않은 사용자입니다.");
                     }
-                });
+                }
+
+                );
+
 
         return http.build();
+
+
     }
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return new CustomLogoutSuccessHandler();
+    }
+
+    private static class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
+
+        @Override
+        public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+                                    org.springframework.security.core.Authentication authentication)
+                throws IOException, ServletException {
+
+            // POST 메서드 및 리디렉션 설정
+            response.setStatus(HttpStatus.OK.value());
+            response.setHeader("Location", "/auth/login");
+            response.setHeader("Allow", "POST");
+        }
+    }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
