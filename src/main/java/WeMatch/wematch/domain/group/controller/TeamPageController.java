@@ -16,7 +16,7 @@ import static WeMatch.wematch.response.Response.success;
 import static WeMatch.wematch.response.ResponseMessage.*;
 import static WeMatch.wematch.response.ResponseMessage.SUCCESS_TO_GET_CANDIDATES;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin
 @RestController
 @AllArgsConstructor
 @RequestMapping("/team")

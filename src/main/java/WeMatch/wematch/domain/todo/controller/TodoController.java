@@ -16,7 +16,7 @@ import java.util.List;
 
 import static WeMatch.wematch.response.ResponseMessage.*;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin
 @RequestMapping("/todo")
 @RequiredArgsConstructor
 @RestController
