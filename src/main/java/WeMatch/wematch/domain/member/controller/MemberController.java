@@ -28,6 +28,11 @@ public class MemberController {
     private final TeamService teamService;
     private final MailService mailService;
 
+    @GetMapping("/index")
+    public String index(){
+        return "/dist/index.html";
+    }
+
     @GetMapping("/teamlist")
     public Response getTeamList(@RequestParam Long memberId){
         List<TeamListResponseDto> result = memberService.getTeamList(memberId);
