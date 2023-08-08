@@ -47,6 +47,7 @@ public class AuthService {
 
     public SigninResponseDto login(JwtRequestDto request) {
         Member member= memberRepository.findByEmail(request.getEmail());
+        System.out.println("null test : "+member+" "+member.getEmail());
         if(!passwordEncoder.matches(request.getPassword(), member.getPassword() )) {
             throw new BadCredentialsException("입력한 정보를 확인하세요");
         }
