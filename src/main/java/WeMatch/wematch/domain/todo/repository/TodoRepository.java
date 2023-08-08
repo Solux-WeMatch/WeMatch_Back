@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TodoRepository {
 
-    public TodoMapper todoDAO;
+    public final TodoMapper todoDAO;
 
     public void saveTodo(TodoSaveRequestDto todoSaveRequestDto){
         todoDAO.saveTodo(todoSaveRequestDto);

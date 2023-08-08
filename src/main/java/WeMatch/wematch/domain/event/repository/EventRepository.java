@@ -19,7 +19,7 @@ import java.util.List;
 @Repository
 @AllArgsConstructor
 public class EventRepository {
-    public EventMapper eventDAO;
+    public final EventMapper eventDAO;
 
     public void saveEvent(EventSaveRequestDto eventSaveRequestDto){
         eventDAO.saveEvent(eventSaveRequestDto);
