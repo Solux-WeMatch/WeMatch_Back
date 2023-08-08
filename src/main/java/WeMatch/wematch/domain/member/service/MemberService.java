@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 public class MemberService {
     @Autowired
     public final MemberRepository memberRepository;
-
+/*
     public Member getCurrentMember() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         if(SecurityContextHolder.getContext()==null) {
@@ -34,6 +34,8 @@ public class MemberService {
         }
         return memberRepository.findByEmail(email);
     }
+
+ */
 
     public List<TeamListResponseDto> getTeamList(Long memberId){
         return memberRepository.getTeamList(memberId);
