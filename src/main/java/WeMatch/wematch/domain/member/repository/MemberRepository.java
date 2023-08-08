@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 @AllArgsConstructor
 public class MemberRepository {
-    private Mapper memberDAO;
+    private final Mapper memberDAO;
 
     public String test(String name) {return memberDAO.test(name);}
 
