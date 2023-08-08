@@ -8,9 +8,12 @@ import WeMatch.wematch.domain.member.service.AuthService;
 import WeMatch.wematch.domain.member.service.MemberService;
 import WeMatch.wematch.response.Response;
 import lombok.AllArgsConstructor;
+/*
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+
+ */
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,11 +49,14 @@ public class AuthController {
     }
 
     //비밀번호 찾기
+    /*
     @PatchMapping("/password")
     public Response findPassword(@RequestBody FindPasswordRequestDto findPasswordRequestDto) {
         Member member = memberService.getCurrentMember();
-        authService.findPassword(findPasswordRequestDto,member);
+        //authService.findPassword(findPasswordRequestDto,member);
         return success(SUCCESS_TO_FIND_PW);
     }
+
+     */
 
 }

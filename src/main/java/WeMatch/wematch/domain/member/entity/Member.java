@@ -1,7 +1,7 @@
 package WeMatch.wematch.domain.member.entity;
 
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,8 +25,5 @@ public class Member {
         this.role=Role.ROLE_MEMBER;
     }
 
-    public void passwordEncoder(PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(password);
-    }
 
 }
