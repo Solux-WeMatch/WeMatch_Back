@@ -7,6 +7,7 @@ import WeMatch.wematch.domain.todo.dto.TodoSaveRequestDto;
 import WeMatch.wematch.domain.todo.entity.Todo;
 import WeMatch.wematch.domain.todo.repository.TodoRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class TodoService {
+    @Autowired
     private final TodoRepository todoRepository;
 
     public void saveTodo(TodoSaveRequestDto todoSaveRequestDto){

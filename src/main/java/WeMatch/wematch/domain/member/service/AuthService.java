@@ -11,6 +11,7 @@ import WeMatch.wematch.domain.member.repository.MemberRepository;
 import WeMatch.wematch.exception.DuplicateMemberException;
 import WeMatch.wematch.exception.WrongInformationException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,7 @@ import java.util.Date;
 @Service
 @AllArgsConstructor
 public class AuthService {
+    @Autowired
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder= PasswordEncoderFactories.createDelegatingPasswordEncoder();
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -33,6 +35,7 @@ public class AuthService {
     public String test(String name) {
        return  memberRepository.test(name);
     }
+
 
     public void singUp(MemberSignUpRequestDto request) {
         boolean exists = memberRepository.ifExists(request.getEmail());

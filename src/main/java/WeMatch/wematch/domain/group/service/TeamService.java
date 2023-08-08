@@ -4,6 +4,7 @@ import WeMatch.wematch.domain.group.dto.*;
 import WeMatch.wematch.domain.group.repository.TeamRepository;
 import WeMatch.wematch.domain.member.dto.TeamCreateRequestDto;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class TeamService {
+    @Autowired
     private final TeamRepository teamRepository;
 
     public List<TeamEventsResponseDto> getEvents(Long groupId) {

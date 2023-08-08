@@ -9,6 +9,7 @@ import WeMatch.wematch.domain.event.repository.EventRepository;
 import WeMatch.wematch.domain.group.dto.TeamEventsResponseDto;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class EventService {
+    @Autowired
     private final EventRepository eventRepository;
 
     public void saveEvent(EventSaveRequestDto eventSaveRequestDto){
